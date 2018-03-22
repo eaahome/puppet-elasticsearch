@@ -59,7 +59,7 @@ When using the repository management, the following module dependencies are requ
 Declare the top-level `elasticsearch` class (managing repositories) and set up an instance:
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   java_install => true,
   manage_repo  => true,
   repo_version => '6.x',
@@ -82,7 +82,7 @@ The following are some parameters that may be useful to override:
 #### Install a specific version
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   version => '1.4.2'
 }
 ```
@@ -95,7 +95,7 @@ By default, the module will not restart Elasticsearch when the configuration fil
 This can be overridden globally with the following option:
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   restart_on_change => true
 }
 ```
@@ -105,7 +105,7 @@ Or controlled with the more granular options: `restart_config_change`, `restart_
 #### Automatic upgrades (default set to false)
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   autoupgrade => true
 }
 ```
@@ -113,7 +113,7 @@ class { 'elasticsearch':
 #### Removal/Decommissioning
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   ensure => 'absent'
 }
 ```
@@ -121,7 +121,7 @@ class { 'elasticsearch':
 #### Install everything but disable service(s) afterwards
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   status => 'disabled'
 }
 ```
@@ -132,7 +132,7 @@ Some resources, such as `elasticsearch6::template`, require communicating with t
 By default, these API settings are set to:
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   api_protocol            => 'http',
   api_host                => 'localhost',
   api_port                => 9200,
@@ -153,7 +153,7 @@ This module supports managing all of its defined types through top-level paramet
 For example, to manage an instance and index template directly from the `elasticsearch` class:
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   instances => {
     'es-01' => {
       'config' => {
@@ -423,7 +423,7 @@ elasticsearch6::python { 'rawes': }
 #### Ruby
 
 ```puppet
-elasticsearch6::ruby { 'elasticsearch': }
+elasticsearch6::ruby { 'elasticsearch6': }
 ```
 
 ### Connection Validator
@@ -455,7 +455,7 @@ This option allows you to use an existing repository for package installation.
 The `repo_version` corresponds with the `major.minor` version of Elasticsearch for versions before 2.x.
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   manage_repo  => true,
   repo_version => '1.4',
 }
@@ -464,7 +464,7 @@ class { 'elasticsearch':
 For 2.x versions of Elasticsearch, use `repo_version => '2.x'`.
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   manage_repo  => true,
   repo_version => '2.x',
 }
@@ -473,7 +473,7 @@ class { 'elasticsearch':
 For users who may wish to install via a local repository (for example, through a mirror), the `repo_baseurl` parameter is available:
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   manage_repo => true,
   repo_baseurl => 'https://repo.local/yum'
 }
@@ -486,7 +486,7 @@ When a repository is not available or preferred you can install the packages fro
 ##### http/https/ftp
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   package_url => 'https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.4.2.deb',
   proxy_url   => 'http://proxy.example.com:8080/',
 }
@@ -500,7 +500,7 @@ Setting the port in the `proxy_url` is mandatory.
 
 ##### puppet://
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   package_url => 'puppet:///path/to/elasticsearch-1.4.2.deb'
 }
 ```
@@ -508,7 +508,7 @@ class { 'elasticsearch':
 ##### Local file
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   package_url => 'file:/path/to/elasticsearch-1.4.2.deb'
 }
 ```
@@ -519,7 +519,7 @@ Most sites will manage Java separately; however, this module can attempt to inst
 This is done by using the [puppetlabs-java](https://forge.puppetlabs.com/puppetlabs/java) module.
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   java_install => true
 }
 ```
@@ -527,7 +527,7 @@ class { 'elasticsearch':
 Specify a particular Java package/version to be installed:
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   java_install => true,
   java_package => 'packagename'
 }
@@ -536,7 +536,7 @@ class { 'elasticsearch':
 When configuring Elasticsearch's memory usage, you can do so by either changing init defaults for Elasticsearch 1.x/2.x (see the [following example](#hash-representation)), or modify it globally in 5.x using `jvm.options`:
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   jvm_options => [
     '-Xms4g',
     '-Xmx4g'
@@ -567,7 +567,7 @@ This can either be a static file resource or a simple key value-style  [hash](ht
 ##### File source
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   init_defaults_file => 'puppet:///path/to/defaults'
 }
 ```
@@ -578,7 +578,7 @@ $config_hash = {
   'ES_HEAP_SIZE' => '30g',
 }
 
-class { 'elasticsearch':
+class { 'elasticsearch6':
   init_defaults => $config_hash
 }
 ```
@@ -599,7 +599,7 @@ Although this module can handle several types of Shield/X-Pack resources, you ar
 For example, the following manifest will install Elasticseach with a single instance running X-Pack:
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   java_install    => true,
   manage_repo     => true,
   repo_version    => '5.x',
@@ -613,7 +613,7 @@ elasticsearch6::plugin { 'x-pack': instances => 'es-01' }
 The following manifest will do the same, but with Shield:
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   java_install    => true,
   manage_repo     => true,
   repo_version    => '2.x',
@@ -763,7 +763,7 @@ Shield/X-Pack system keys can be passed to the module, where they will be placed
 This can be set at the `elasticsearch` class and inherited across all instances:
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   system_key => 'puppet:///path/to/key',
 }
 ```
@@ -782,7 +782,7 @@ The module supports pinning the package version to avoid accidental upgrades tha
 To enable this feature:
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   package_pin => true,
   version     => '1.5.2',
 }
@@ -806,7 +806,7 @@ Which provides a data directory per instance.
 #### Single global data directory
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   datadir => '/var/lib/elasticsearch-data'
 }
 ```
@@ -818,7 +818,7 @@ Creates the following for each instance:
 #### Multiple Global data directories
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   datadir => [ '/var/lib/es-data1', '/var/lib/es-data2']
 }
 ```
@@ -830,7 +830,7 @@ and
 #### Single instance data directory
 
 ```puppet
-class { 'elasticsearch': }
+class { 'elasticsearch6': }
 
 elasticsearch6::instance { 'es-01':
   datadir => '/var/lib/es-data-es01'
@@ -844,7 +844,7 @@ Creates the following for this instance:
 #### Multiple instance data directories
 
 ```puppet
-class { 'elasticsearch': }
+class { 'elasticsearch6': }
 
 elasticsearch6::instance { 'es-01':
   datadir => ['/var/lib/es-data1-es01', '/var/lib/es-data2-es01']
@@ -861,7 +861,7 @@ and
 In some cases, you may want to share a top-level data directory among multiple instances.
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   datadir_instance_directories => false,
   config => {
     'node.max_local_storage_nodes' => 2
@@ -888,7 +888,7 @@ The options in the `instance` config hash will merged with the ones from the mai
 #### Simple merging
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   config => { 'cluster.name' => 'clustername' }
 }
 
@@ -907,7 +907,7 @@ This example merges the `cluster.name` together with the `node.name` option.
 When duplicate options are provided, the option in the instance config overrides the ones from the main class.
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   config => { 'cluster.name' => 'clustername' }
 }
 
@@ -931,7 +931,7 @@ The `config` hash can be written in 2 different ways:
 Instead of writing the full hash representation:
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   config                 => {
    'cluster'             => {
      'name'              => 'ClusterName',
@@ -950,7 +950,7 @@ class { 'elasticsearch':
 ##### Short hash writeup
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   config => {
     'cluster' => {
       'name' => 'ClusterName',
@@ -971,7 +971,7 @@ Note that each hash key is passed to the `elasticsearch-keystore` utility in a s
 For example, to define cloud plugin credentials for all instances:
 
 ```puppet
-class { 'elasticsearch':
+class { 'elasticsearch6':
   secrets => {
     'cloud.aws.access_key' => 'AKIA....',
     'cloud.aws.secret_key' => 'AKIA....',
