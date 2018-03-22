@@ -113,18 +113,49 @@ shared_examples 'plugin provider' do |version|
         end
       end
 
-      it 'sets up the configuration environment variable' do
-        expect(provider.with_environment do
-          ENV['ES_PATH_CONF']
-        end).to eq('/etc/elasticsearch')
+      describe 'configdir' do
+        it 'sets the ES_PATH_CONF env var' do
+          resource[:configdir] = '/etc/elasticsearch'
+          expect(provider.with_environment do
+            ENV['ES_PATH_CONF']
+          end).to eq('/etc/elasticsearch')
+        end
       end
     end # of setup
+
+    describe 'java_opts' do
+      it 'uses authentication credentials' do
+        resource[:java_opts] = ['-Des.plugins.staging=4a2ffaf5']
+        expect(provider.with_environment do
+          ENV['ES_JAVA_OPTS']
+        end).to eq('-Des.plugins.staging=4a2ffaf5')
+      end
+    end
+
+    describe 'java_home' do
+      it 'sets the JAVA_HOME env var' do
+        resource[:java_home] = '/opt/foo'
+        expect(provider.with_environment do
+          ENV['JAVA_HOME']
+        end).to eq('/opt/foo')
+      end
+    end
+
+    describe 'java_home unset' do
+      existing_java_home = ENV['JAVA_HOME']
+      it 'does not change JAVA_HOME env var' do
+        resource[:java_home] = ''
+        expect(provider.with_environment do
+          ENV['JAVA_HOME']
+        end).to eq(existing_java_home)
+      end
+    end
 
     describe 'plugin_name' do
       let(:resource_name) { 'appbaseio/dejaVu' }
 
       it 'maintains mixed-case names' do
-        expect(provider.pluginfile).to include('dejaVu')
+        expect(provider.plugin_path).to include('dejaVu')
       end
     end
 

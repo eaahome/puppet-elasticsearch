@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'elasticsearch::ruby', :type => 'define' do
+describe 'elasticsearch6::ruby', :type => 'define' do
 
   let :facts do {
     :operatingsystem => 'CentOS',

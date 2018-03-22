@@ -1,10 +1,10 @@
 ---
-elasticsearch::instances:
+elasticsearch6::instances:
   es-hiera-single:
     config:
       node.name: 'es-01'
       network.host: '0.0.0.0'
-elasticsearch::plugins:
+elasticsearch6::plugins:
   'mobz/elasticsearch-head':
     ensure: 'present'
     module_dir: 'head'

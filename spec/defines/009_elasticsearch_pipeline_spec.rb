@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 # rubocop:disable Metrics/BlockLength
-describe 'elasticsearch::pipeline', :type => 'define' do
+describe 'elasticsearch6::pipeline', :type => 'define' do
   let :facts do
     {
       :operatingsystem => 'CentOS',

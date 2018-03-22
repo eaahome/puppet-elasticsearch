@@ -329,7 +329,7 @@
 # @author Richard Pijnenburg <richard.pijnenburg@elasticsearch.com>
 # @author Tyler Langlois <tyler.langlois@elastic.co>
 #
-class elasticsearch(
+class elasticsearch6(
   $ensure                         = 'present',
   $api_basic_auth_password        = undef,
   $api_basic_auth_username        = undef,
@@ -342,19 +342,19 @@ class elasticsearch(
   $autoupgrade                    = false,
   $config                         = undef,
   $config_hiera_merge             = false,
-  $configdir                      = $elasticsearch::params::configdir,
+  $configdir                      = $elasticsearch6::params::configdir,
   $daily_rolling_date_pattern     = '"\'.\'yyyy-MM-dd"',
-  $datadir                        = $elasticsearch::params::datadir,
+  $datadir                        = $elasticsearch6::params::datadir,
   $datadir_instance_directories   = true,
   $default_logging_level          = 'INFO',
-  $elasticsearch_group            = $elasticsearch::params::elasticsearch_group,
-  $elasticsearch_user             = $elasticsearch::params::elasticsearch_user,
+  $elasticsearch_group            = $elasticsearch6::params::elasticsearch_group,
+  $elasticsearch_user             = $elasticsearch6::params::elasticsearch_user,
   $file_rolling_type              = 'dailyRollingFile',
   $indices                        = undef,
   $indices_hiera_merge            = false,
   $init_defaults                  = undef,
   $init_defaults_file             = undef,
-  $init_template                  = "${module_name}/etc/init.d/${elasticsearch::params::init_template}",
+  $init_template                  = "${module_name}/etc/init.d/${elasticsearch6::params::init_template}",
   $instances                      = undef,
   $instances_hiera_merge          = false,
   $java_install                   = false,
@@ -367,15 +367,15 @@ class elasticsearch(
   $logging_template               = undef,
   $logging_yml_ensure             = 'file',
   $manage_repo                    = false,
-  $package_dir                    = $elasticsearch::params::package_dir,
+  $package_dir                    = $elasticsearch6::params::package_dir,
   $package_dl_timeout             = 600,
-  $package_name                   = $elasticsearch::params::package,
+  $package_name                   = $elasticsearch6::params::package,
   $package_pin                    = true,
   $package_provider               = 'package',
   $package_url                    = undef,
   $pipelines                      = undef,
   $pipelines_hiera_merge          = false,
-  $plugindir                      = $elasticsearch::params::plugindir,
+  $plugindir                      = $elasticsearch6::params::plugindir,
   $plugins                        = undef,
   $plugins_hiera_merge            = false,
   $proxy_url                      = undef,
@@ -389,10 +389,10 @@ class elasticsearch(
   $repo_proxy                     = undef,
   $repo_stage                     = false,
   $repo_version                   = undef,
-  $restart_on_change              = $elasticsearch::params::restart_on_change,
-  $restart_config_change          = $elasticsearch::restart_on_change,
-  $restart_package_change         = $elasticsearch::restart_on_change,
-  $restart_plugin_change          = $elasticsearch::restart_on_change,
+  $restart_on_change              = $elasticsearch6::params::restart_on_change,
+  $restart_config_change          = $elasticsearch6::restart_on_change,
+  $restart_package_change         = $elasticsearch6::restart_on_change,
+  $restart_plugin_change          = $elasticsearch6::restart_on_change,
   $roles                          = undef,
   $roles_hiera_merge              = false,
   $rolling_file_max_backup_index  = 1,
@@ -412,9 +412,9 @@ class elasticsearch(
   $users_hiera_merge              = false,
   $validate_tls                   = true,
   $version                        = false,
-) inherits elasticsearch::params {
+) inherits elasticsearch6::params {
 
-  anchor {'elasticsearch::begin': }
+  anchor {'elasticsearch6::begin': }
 
   #### Validate parameters
 
@@ -451,15 +451,15 @@ class elasticsearch(
   # purge conf dir
   validate_bool($purge_configdir)
 
-  if is_array($elasticsearch::params::service_providers) {
+  if is_array($elasticsearch6::params::service_providers) {
     # Verify the service provider given is in the array
-    if ! ($service_provider in $elasticsearch::params::service_providers) {
+    if ! ($service_provider in $elasticsearch6::params::service_providers) {
       fail("\"${service_provider}\" is not a valid provider for \"${::operatingsystem}\"")
     }
     $real_service_provider = $service_provider
   } else {
     # There is only one option so simply set it
-    $real_service_provider = $elasticsearch::params::service_providers
+    $real_service_provider = $elasticsearch6::params::service_providers
   }
 
   if ($package_url != undef and $version != false) {
@@ -534,16 +534,16 @@ class elasticsearch(
   #### Manage actions
 
   # package(s)
-  class { 'elasticsearch::package': }
+  class { 'elasticsearch6::package': }
 
   # configuration
-  class { 'elasticsearch::config': }
+  class { 'elasticsearch6::config': }
 
   # Hiera support for configuration hash
   validate_bool($config_hiera_merge)
 
   if $config_hiera_merge == true {
-    $x_config = hiera_hash('elasticsearch::config', $config)
+    $x_config = hiera_hash('elasticsearch6::config', $config)
   } else {
     $x_config = $config
   }
@@ -552,112 +552,112 @@ class elasticsearch(
   validate_bool($indices_hiera_merge)
 
   if $indices_hiera_merge == true {
-    $x_indices = hiera_hash('elasticsearch::indices', $::elasticsearch::indices)
+    $x_indices = hiera_hash('elasticsearch6::indices', $::elasticsearch6::indices)
   } else {
     $x_indices = $indices
   }
 
   if $x_indices {
     validate_hash($x_indices)
-    create_resources('elasticsearch::index', $x_indices)
+    create_resources('elasticsearch6::index', $x_indices)
   }
 
   # Hiera support for instances
   validate_bool($instances_hiera_merge)
 
   if $instances_hiera_merge == true {
-    $x_instances = hiera_hash('elasticsearch::instances', $::elasticsearch::instances)
+    $x_instances = hiera_hash('elasticsearch6::instances', $::elasticsearch6::instances)
   } else {
     $x_instances = $instances
   }
 
   if $x_instances {
     validate_hash($x_instances)
-    create_resources('elasticsearch::instance', $x_instances)
+    create_resources('elasticsearch6::instance', $x_instances)
   }
 
   # Hiera support for pipelines
   validate_bool($pipelines_hiera_merge)
 
   if $pipelines_hiera_merge == true {
-    $x_pipelines = hiera_hash('elasticsearch::pipelines', $::elasticsearch::pipelines)
+    $x_pipelines = hiera_hash('elasticsearch6::pipelines', $::elasticsearch6::pipelines)
   } else {
     $x_pipelines = $pipelines
   }
 
   if $x_pipelines {
     validate_hash($x_pipelines)
-    create_resources('elasticsearch::pipeline', $x_pipelines)
+    create_resources('elasticsearch6::pipeline', $x_pipelines)
   }
 
   # Hiera support for plugins
   validate_bool($plugins_hiera_merge)
 
   if $plugins_hiera_merge == true {
-    $x_plugins = hiera_hash('elasticsearch::plugins', $::elasticsearch::plugins)
+    $x_plugins = hiera_hash('elasticsearch6::plugins', $::elasticsearch6::plugins)
   } else {
     $x_plugins = $plugins
   }
 
   if $x_plugins {
     validate_hash($x_plugins)
-    create_resources('elasticsearch::plugin', $x_plugins)
+    create_resources('elasticsearch6::plugin', $x_plugins)
   }
 
   # Hiera support for roles
   validate_bool($roles_hiera_merge)
 
   if $roles_hiera_merge == true {
-    $x_roles = hiera_hash('elasticsearch::roles', $::elasticsearch::roles)
+    $x_roles = hiera_hash('elasticsearch6::roles', $::elasticsearch6::roles)
   } else {
     $x_roles = $roles
   }
 
   if $x_roles {
     validate_hash($x_roles)
-    create_resources('elasticsearch::role', $x_roles)
+    create_resources('elasticsearch6::role', $x_roles)
   }
 
   # Hiera support for scripts
   validate_bool($scripts_hiera_merge)
 
   if $scripts_hiera_merge == true {
-    $x_scripts = hiera_hash('elasticsearch::scripts', $::elasticsearch::scripts)
+    $x_scripts = hiera_hash('elasticsearch6::scripts', $::elasticsearch6::scripts)
   } else {
     $x_scripts = $scripts
   }
 
   if $x_scripts {
     validate_hash($x_scripts)
-    create_resources('elasticsearch::script', $x_scripts)
+    create_resources('elasticsearch6::script', $x_scripts)
   }
 
   # Hiera support for templates
   validate_bool($templates_hiera_merge)
 
   if $templates_hiera_merge == true {
-    $x_templates = hiera_hash('elasticsearch::templates', $::elasticsearch::templates)
+    $x_templates = hiera_hash('elasticsearch6::templates', $::elasticsearch6::templates)
   } else {
     $x_templates = $templates
   }
 
   if $x_templates {
     validate_hash($x_templates)
-    create_resources('elasticsearch::template', $x_templates)
+    create_resources('elasticsearch6::template', $x_templates)
   }
 
   # Hiera support for users
   validate_bool($users_hiera_merge)
 
   if $users_hiera_merge == true {
-    $x_users = hiera_hash('elasticsearch::users', $::elasticsearch::users)
+    $x_users = hiera_hash('elasticsearch6::users', $::elasticsearch6::users)
   } else {
     $x_users = $users
   }
 
   if $x_users {
     validate_hash($x_users)
-    create_resources('elasticsearch::user', $x_users)
+    create_resources('elasticsearch6::user', $x_users)
   }
 
   if $java_install == true {
@@ -668,14 +668,14 @@ class elasticsearch(
     }
 
     # ensure we first install java, the package and then the rest
-    Anchor['elasticsearch::begin']
+    Anchor['elasticsearch6::begin']
     -> Class['::java']
-    -> Class['elasticsearch::package']
+    -> Class['elasticsearch6::package']
   }
 
   if $package_pin {
-    class { 'elasticsearch::package::pin':
-      before => Class['elasticsearch::package'],
+    class { 'elasticsearch6::package::pin':
+      before => Class['elasticsearch6::package'],
     }
   }
 
@@ -685,13 +685,13 @@ class elasticsearch(
       # use anchor for ordering
 
       # Set up repositories
-      class { 'elasticsearch::repo': }
+      class { 'elasticsearch6::repo': }
 
       # Ensure that we set up the repositories before trying to install
       # the packages
-      Anchor['elasticsearch::begin']
-      -> Class['elasticsearch::repo']
-      -> Class['elasticsearch::package']
+      Anchor['elasticsearch6::begin']
+      -> Class['elasticsearch6::repo']
+      -> Class['elasticsearch6::package']
 
     } else {
       # use staging for ordering
@@ -700,7 +700,7 @@ class elasticsearch(
         stage { $repo_stage:  before => Stage['main'] }
       }
 
-      class { 'elasticsearch::repo':
+      class { 'elasticsearch6::repo':
         stage => $repo_stage,
       }
     }
@@ -719,113 +719,113 @@ class elasticsearch(
   if $ensure == 'present' {
 
     # Anchor, installation, and configuration
-    Anchor['elasticsearch::begin']
-    -> Class['elasticsearch::package']
-    -> Class['elasticsearch::config']
+    Anchor['elasticsearch6::begin']
+    -> Class['elasticsearch6::package']
+    -> Class['elasticsearch6::config']
 
     # Top-level ordering bindings for resources.
-    Class['elasticsearch::config']
-    -> Elasticsearch::Plugin <| ensure == 'present' or ensure == 'installed' |>
-    Elasticsearch::Plugin <| ensure == 'absent' |>
-    -> Class['elasticsearch::config']
-    Class['elasticsearch::config']
-    -> Elasticsearch::Instance <| |>
-    Class['elasticsearch::config']
-    -> Elasticsearch::User <| |>
-    Class['elasticsearch::config']
-    -> Elasticsearch::Role <| |>
-    Class['elasticsearch::config']
-    -> Elasticsearch::Template <| |>
-    Class['elasticsearch::config']
-    -> Elasticsearch::Pipeline <| |>
-    Class['elasticsearch::config']
-    -> Elasticsearch::Index <| |>
+    Class['elasticsearch6::config']
+    -> Elasticsearch6::Plugin <| ensure == 'present' or ensure == 'installed' |>
+    Elasticsearch6::Plugin <| ensure == 'absent' |>
+    -> Class['elasticsearch6::config']
+    Class['elasticsearch6::config']
+    -> Elasticsearch6::Instance <| |>
+    Class['elasticsearch6::config']
+    -> Elasticsearch6::User <| |>
+    Class['elasticsearch6::config']
+    -> Elasticsearch6::Role <| |>
+    Class['elasticsearch6::config']
+    -> Elasticsearch6::Template <| |>
+    Class['elasticsearch6::config']
+    -> Elasticsearch6::Pipeline <| |>
+    Class['elasticsearch6::config']
+    -> Elasticsearch6::Index <| |>
 
   } else {
 
     # Main anchor and included classes
-    Anchor['elasticsearch::begin']
-    -> Class['elasticsearch::config']
-    -> Class['elasticsearch::package']
+    Anchor['elasticsearch6::begin']
+    -> Class['elasticsearch6::config']
+    -> Class['elasticsearch6::package']
 
     # Top-level ordering bindings for resources.
-    Anchor['elasticsearch::begin']
-    -> Elasticsearch::Plugin <| |>
-    -> Class['elasticsearch::config']
-    Anchor['elasticsearch::begin']
-    -> Elasticsearch::Instance <| |>
-    -> Class['elasticsearch::config']
-    Anchor['elasticsearch::begin']
-    -> Elasticsearch::User <| |>
-    -> Class['elasticsearch::config']
-    Anchor['elasticsearch::begin']
-    -> Elasticsearch::Role <| |>
-    -> Class['elasticsearch::config']
-    Anchor['elasticsearch::begin']
-    -> Elasticsearch::Template <| |>
-    -> Class['elasticsearch::config']
-    Anchor['elasticsearch::begin']
-    -> Elasticsearch::Pipeline <| |>
-    -> Class['elasticsearch::config']
-    Anchor['elasticsearch::begin']
-    -> Elasticsearch::Index <| |>
-    -> Class['elasticsearch::config']
+    Anchor['elasticsearch6::begin']
+    -> Elasticsearch6::Plugin <| |>
+    -> Class['elasticsearch6::config']
+    Anchor['elasticsearch6::begin']
+    -> Elasticsearch6::Instance <| |>
+    -> Class['elasticsearch6::config']
+    Anchor['elasticsearch6::begin']
+    -> Elasticsearch6::User <| |>
+    -> Class['elasticsearch6::config']
+    Anchor['elasticsearch6::begin']
+    -> Elasticsearch6::Role <| |>
+    -> Class['elasticsearch6::config']
+    Anchor['elasticsearch6::begin']
+    -> Elasticsearch6::Template <| |>
+    -> Class['elasticsearch6::config']
+    Anchor['elasticsearch6::begin']
+    -> Elasticsearch6::Pipeline <| |>
+    -> Class['elasticsearch6::config']
+    Anchor['elasticsearch6::begin']
+    -> Elasticsearch6::Index <| |>
+    -> Class['elasticsearch6::config']
 
   }
 
   # Install plugins before managing instances or users/roles
-  Elasticsearch::Plugin <| ensure == 'present' or ensure == 'installed' |>
-  -> Elasticsearch::Instance <| |>
-  Elasticsearch::Plugin <| ensure == 'present' or ensure == 'installed' |>
-  -> Elasticsearch::User <| |>
-  Elasticsearch::Plugin <| ensure == 'present' or ensure == 'installed' |>
-  -> Elasticsearch::Role <| |>
+  Elasticsearch6::Plugin <| ensure == 'present' or ensure == 'installed' |>
+  -> Elasticsearch6::Instance <| |>
+  Elasticsearch6::Plugin <| ensure == 'present' or ensure == 'installed' |>
+  -> Elasticsearch6::User <| |>
+  Elasticsearch6::Plugin <| ensure == 'present' or ensure == 'installed' |>
+  -> Elasticsearch6::Role <| |>
 
   # Remove plugins after managing users/roles
-  Elasticsearch::User <| |>
-  -> Elasticsearch::Plugin <| ensure == 'absent' |>
-  Elasticsearch::Role <| |>
-  -> Elasticsearch::Plugin <| ensure == 'absent' |>
+  Elasticsearch6::User <| |>
+  -> Elasticsearch6::Plugin <| ensure == 'absent' |>
+  Elasticsearch6::Role <| |>
+  -> Elasticsearch6::Plugin <| ensure == 'absent' |>
 
   # Ensure roles are defined before managing users that reference roles
-  Elasticsearch::Role <| |>
-  -> Elasticsearch::User <| ensure == 'present' |>
+  Elasticsearch6::Role <| |>
+  -> Elasticsearch6::User <| ensure == 'present' |>
   # Ensure users are removed before referenced roles are managed
-  Elasticsearch::User <| ensure == 'absent' |>
-  -> Elasticsearch::Role <| |>
+  Elasticsearch6::User <| ensure == 'absent' |>
+  -> Elasticsearch6::Role <| |>
 
   # Ensure users and roles are managed before calling out to REST resources
-  Elasticsearch::Role <| |>
-  -> Elasticsearch::Template <| |>
-  Elasticsearch::User <| |>
-  -> Elasticsearch::Template <| |>
-  Elasticsearch::Role <| |>
-  -> Elasticsearch::Pipeline <| |>
-  Elasticsearch::User <| |>
-  -> Elasticsearch::Pipeline <| |>
-  Elasticsearch::Role <| |>
-  -> Elasticsearch::Index <| |>
-  Elasticsearch::User <| |>
-  -> Elasticsearch::Index <| |>
+  Elasticsearch6::Role <| |>
+  -> Elasticsearch6::Template <| |>
+  Elasticsearch6::User <| |>
+  -> Elasticsearch6::Template <| |>
+  Elasticsearch6::Role <| |>
+  -> Elasticsearch6::Pipeline <| |>
+  Elasticsearch6::User <| |>
+  -> Elasticsearch6::Pipeline <| |>
+  Elasticsearch6::Role <| |>
+  -> Elasticsearch6::Index <| |>
+  Elasticsearch6::User <| |>
+  -> Elasticsearch6::Index <| |>
 
   # Manage users/roles before instances (req'd to keep dir in sync)
-  Elasticsearch::Role <| |>
-  -> Elasticsearch::Instance <| |>
-  Elasticsearch::User <| |>
-  -> Elasticsearch::Instance <| |>
+  Elasticsearch6::Role <| |>
+  -> Elasticsearch6::Instance <| |>
+  Elasticsearch6::User <| |>
+  -> Elasticsearch6::Instance <| |>
 
   # Ensure instances are started before managing REST resources
-  Elasticsearch::Instance <| ensure == 'present' |>
-  -> Elasticsearch::Template <| |>
-  Elasticsearch::Instance <| ensure == 'present' |>
-  -> Elasticsearch::Pipeline <| |>
-  Elasticsearch::Instance <| ensure == 'present' |>
-  -> Elasticsearch::Index <| |>
+  Elasticsearch6::Instance <| ensure == 'present' |>
+  -> Elasticsearch6::Template <| |>
+  Elasticsearch6::Instance <| ensure == 'present' |>
+  -> Elasticsearch6::Pipeline <| |>
+  Elasticsearch6::Instance <| ensure == 'present' |>
+  -> Elasticsearch6::Index <| |>
   # Ensure instances are stopped after managing REST resources
-  Elasticsearch::Template <| |>
-  -> Elasticsearch::Instance <| ensure == 'absent' |>
-  Elasticsearch::Pipeline <| |>
-  -> Elasticsearch::Instance <| ensure == 'absent' |>
-  Elasticsearch::Index <| |>
-  -> Elasticsearch::Instance <| ensure == 'absent' |>
+  Elasticsearch6::Template <| |>
+  -> Elasticsearch6::Instance <| ensure == 'absent' |>
+  Elasticsearch6::Pipeline <| |>
+  -> Elasticsearch6::Instance <| ensure == 'absent' |>
+  Elasticsearch6::Index <| |>
+  -> Elasticsearch6::Instance <| ensure == 'absent' |>
 }

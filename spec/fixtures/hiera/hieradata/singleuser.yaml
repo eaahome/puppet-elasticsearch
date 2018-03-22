@@ -1,5 +1,5 @@
 ---
-elasticsearch::users:
+elasticsearch6::users:
   elastic:
     ensure: present
     password: password

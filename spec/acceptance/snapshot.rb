@@ -30,7 +30,7 @@ describe 'Integration testing' do
           package_url => '#{test_settings['integration_package'][:file]}'
         }
 
-        elasticsearch::instance { 'es-01':
+        elasticsearch6::instance { 'es-01':
           config => {
             'node.name' => 'elasticsearch001',
             'http.port' => '#{test_settings['port_a']}'
@@ -92,14 +92,14 @@ describe 'Integration testing' do
             package_url => '#{test_settings['integration_package'][:file]}'
           }
 
-          elasticsearch::instance { 'es-01':
+          elasticsearch6::instance { 'es-01':
             config => {
               'node.name' => 'elasticsearch001',
               'http.port' => '#{test_settings['port_a']}'
             }
           }
 
-          elasticsearch::template { 'foo':
+          elasticsearch6::template { 'foo':
             ensure => 'present',
             source => 'puppet:///modules/another/good.json'
           }
@@ -141,14 +141,14 @@ describe 'Integration testing' do
             package_url => '#{test_settings['integration_package'][:file]}'
           }
 
-          elasticsearch::instance { 'es-01':
+          elasticsearch6::instance { 'es-01':
             config => {
               'node.name' => 'elasticsearch001',
               'http.port' => '#{test_settings['port_a']}'
             }
           }
 
-          elasticsearch::template { 'foo':
+          elasticsearch6::template { 'foo':
             ensure => 'present',
             source => 'puppet:///modules/another/bad.json'
           }
@@ -172,14 +172,14 @@ describe 'Integration testing' do
             package_url => '#{test_settings['integration_package'][:file]}'
           }
 
-          elasticsearch::instance { 'es-01':
+          elasticsearch6::instance { 'es-01':
             config => {
               'node.name' => 'elasticsearch001',
               'http.port' => '#{test_settings['port_a']}'
             }
           }
 
-          elasticsearch::plugin { 'x-pack':
+          elasticsearch6::plugin { 'x-pack':
             ensure => 'present',
           }
         EOS

@@ -5,24 +5,24 @@
 # definitions or other modules.
 #
 # @example importing this class to be used by other classes to use its functionality:
-#   class { 'elasticsearch::repo': }
+#   class { 'elasticsearch6::repo': }
 #
 # @author Richard Pijnenburg <richard.pijnenburg@elasticsearch.com>
 # @author Phil Fenstermacher <phillip.fenstermacher@gmail.com>
 # @author Tyler Langlois <tyler.langlois@elastic.co>
 #
-class elasticsearch::repo {
+class elasticsearch6::repo {
 
   Exec {
     path => [ '/bin', '/usr/bin', '/usr/local/bin' ],
     cwd  => '/',
   }
 
-  if $elasticsearch::ensure == 'present' {
-    if $::elasticsearch::repo_baseurl != undef {
-      $_baseurl = $::elasticsearch::repo_baseurl
+  if $elasticsearch6::ensure == 'present' {
+    if $::elasticsearch6::repo_baseurl != undef {
+      $_baseurl = $::elasticsearch6::repo_baseurl
     } else {
-      if versioncmp($elasticsearch::repo_version, '5.0') >= 0 {
+      if versioncmp($elasticsearch6::repo_version, '5.0') >= 0 {
         $_repo_url = 'https://artifacts.elastic.co/packages'
         case $::osfamily {
           'Debian': {
@@ -44,7 +44,7 @@ class elasticsearch::repo {
         }
       }
 
-      $_baseurl = "${_repo_url}/${elasticsearch::repo_version}/${_repo_path}"
+      $_baseurl = "${_repo_url}/${elasticsearch6::repo_version}/${_repo_path}"
     }
   } else {
     case $::osfamily {
@@ -60,22 +60,22 @@ class elasticsearch::repo {
   case $::osfamily {
     'Debian': {
       include ::apt
-      Class['apt::update'] -> Package[$elasticsearch::package_name]
+      Class['apt::update'] -> Package[$elasticsearch6::package_name]
 
       apt::source { 'elasticsearch':
-        ensure   => $elasticsearch::ensure,
+        ensure   => $elasticsearch6::ensure,
         location => $_baseurl,
         release  => 'stable',
         repos    => 'main',
         key      => {
-          'id'     => $::elasticsearch::repo_key_id,
-          'source' => $::elasticsearch::repo_key_source,
+          'id'     => $::elasticsearch6::repo_key_id,
+          'source' => $::elasticsearch6::repo_key_source,
         },
         include  => {
           'src' => false,
           'deb' => true,
         },
-        pin      => $elasticsearch::repo_priority,
+        pin      => $elasticsearch6::repo_priority,
       }
     }
     'RedHat', 'Linux': {
@@ -83,17 +83,17 @@ class elasticsearch::repo {
       # See: https://tickets.puppetlabs.com/browse/PUP-2163
       if versioncmp($::puppetversion, '3.5.1') >= 0 {
         Yumrepo['elasticsearch'] {
-          ensure => $elasticsearch::ensure,
+          ensure => $elasticsearch6::ensure,
         }
       }
       yumrepo { 'elasticsearch':
         descr    => 'elasticsearch repo',
         baseurl  => $_baseurl,
         gpgcheck => 1,
-        gpgkey   => $::elasticsearch::repo_key_source,
+        gpgkey   => $::elasticsearch6::repo_key_source,
         enabled  => 1,
-        proxy    => $::elasticsearch::repo_proxy,
-        priority => $elasticsearch::repo_priority,
+        proxy    => $::elasticsearch6::repo_proxy,
+        priority => $elasticsearch6::repo_priority,
       }
       ~> exec { 'elasticsearch_yumrepo_yum_clean':
         command     => 'yum clean metadata expire-cache --disablerepo="*" --enablerepo="elasticsearch"',
@@ -104,9 +104,9 @@ class elasticsearch::repo {
     'Suse': {
       if $::operatingsystem == 'SLES' and versioncmp($::operatingsystemmajrelease, '11') <= 0 {
         # Older versions of SLES do not ship with rpmkeys
-        $_import_cmd = "rpm --import ${::elasticsearch::repo_key_source}"
+        $_import_cmd = "rpm --import ${::elasticsearch6::repo_key_source}"
       } else {
-        $_import_cmd = "rpmkeys --import ${::elasticsearch::repo_key_source}"
+        $_import_cmd = "rpmkeys --import ${::elasticsearch6::repo_key_source}"
       }
 
       exec { 'elasticsearch_suse_import_gpg':
@@ -122,7 +122,7 @@ class elasticsearch::repo {
         autorefresh => 1,
         name        => 'elasticsearch',
         gpgcheck    => 1,
-        gpgkey      => $::elasticsearch::repo_key_source,
+        gpgkey      => $::elasticsearch6::repo_key_source,
         type        => 'yum',
       }
       ~> exec { 'elasticsearch_zypper_refresh_elasticsearch':

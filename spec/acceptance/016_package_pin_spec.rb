@@ -2,7 +2,7 @@ require 'spec_helper_acceptance'
 
 # rubocop:disable Metrics/BlockLength
 if fact('osfamily') != 'Suse'
-  describe 'elasticsearch::package_pin', :with_cleanup do
+  describe 'elasticsearch6::package_pin', :with_cleanup do
     describe 'initial installation' do
       describe 'manifest' do
         pp = <<-EOS
@@ -17,7 +17,7 @@ if fact('osfamily') != 'Suse'
             java_install => true,
           }
 
-          elasticsearch::instance { 'es-01':
+          elasticsearch6::instance { 'es-01':
             config => {
               'node.name' => 'elasticsearch001',
               'http.port' => '#{test_settings['port_a']}',
@@ -75,7 +75,7 @@ if fact('osfamily') != 'Suse'
             java_install => true,
           }
 
-          elasticsearch::instance { 'es-01':
+          elasticsearch6::instance { 'es-01':
             config => {
               'node.name' => 'elasticsearch001',
               'http.port' => '#{test_settings['port_a']}',

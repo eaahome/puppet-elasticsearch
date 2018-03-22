@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'elasticsearch::plugin', :type => 'define' do
+describe 'elasticsearch6::plugin', :type => 'define' do
   let(:title) { 'mobz/elasticsearch-head/1.0.0' }
 
   on_supported_os(
@@ -132,14 +132,14 @@ describe 'elasticsearch::plugin', :type => 'define' do
           <<-EOS
             class { "elasticsearch": }
 
-            elasticsearch::instance { 'es-plugin': }
+            elasticsearch6::instance { 'es-plugin': }
           EOS
         end
 
         it { should_not contain_elasticsearch_plugin(
           'head'
         ).that_notifies(
-          'Elasticsearch::Service[es-plugin]'
+          'Elasticsearch6::Service[es-plugin]'
         )}
 
         include_examples 'instance', 'es-plugin', :sysv
@@ -152,14 +152,14 @@ describe 'elasticsearch::plugin', :type => 'define' do
               restart_on_change => true,
             }
 
-            elasticsearch::instance { 'es-plugin': }
+            elasticsearch6::instance { 'es-plugin': }
           EOS
         end
 
         it { should contain_elasticsearch_plugin(
           'head'
         ).that_notifies(
-          'Elasticsearch::Service[es-plugin]'
+          'Elasticsearch6::Service[es-plugin]'
         )}
 
         include_examples 'instance', 'es-plugin', :sysv
@@ -172,14 +172,14 @@ describe 'elasticsearch::plugin', :type => 'define' do
               restart_plugin_change => false,
             }
 
-            elasticsearch::instance { 'es-plugin': }
+            elasticsearch6::instance { 'es-plugin': }
           EOS
         end
 
         it { should_not contain_elasticsearch_plugin(
           'head'
         ).that_notifies(
-          'Elasticsearch::Service[es-plugin]'
+          'Elasticsearch6::Service[es-plugin]'
         )}
 
         include_examples 'instance', 'es-plugin', :sysv
@@ -192,14 +192,14 @@ describe 'elasticsearch::plugin', :type => 'define' do
               restart_plugin_change => true,
             }
 
-            elasticsearch::instance { 'es-plugin': }
+            elasticsearch6::instance { 'es-plugin': }
           EOS
         end
 
         it { should contain_elasticsearch_plugin(
           'head'
         ).that_notifies(
-          'Elasticsearch::Service[es-plugin]'
+          'Elasticsearch6::Service[es-plugin]'
         )}
 
         include_examples 'instance', 'es-plugin', :sysv
@@ -294,7 +294,7 @@ describe 'elasticsearch::plugin', :type => 'define' do
         let(:pre_condition) do
           <<-EOS
             class { 'elasticsearch': }
-            elasticsearch::instance { 'es-plugin': }
+            elasticsearch6::instance { 'es-plugin': }
           EOS
         end
 
@@ -305,7 +305,7 @@ describe 'elasticsearch::plugin', :type => 'define' do
         it { should contain_elasticsearch__plugin(
           'head'
         ).that_comes_before(
-          'Elasticsearch::Instance[es-plugin]'
+          'Elasticsearch6::Instance[es-plugin]'
         )}
 
         include_examples 'instance', 'es-plugin', :sysv

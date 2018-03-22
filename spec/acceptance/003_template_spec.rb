@@ -2,7 +2,7 @@ require 'spec_helper_acceptance'
 require 'json'
 
 # rubocop:disable Metrics/BlockLength
-describe 'elasticsearch::template', :with_cleanup do
+describe 'elasticsearch6::template', :with_cleanup do
   before :all do
     shell "mkdir -p #{default['distmoduledir']}/another/files"
 
@@ -30,14 +30,14 @@ describe 'elasticsearch::template', :with_cleanup do
             java_install => true
           }
 
-          elasticsearch::instance { 'es-01':
+          elasticsearch6::instance { 'es-01':
             config => {
               'node.name' => 'elasticsearch001',
               'http.port' => '#{test_settings['port_a']}'
             }
           }
 
-          elasticsearch::template { 'foo':
+          elasticsearch6::template { 'foo':
             ensure => 'present',
             source => 'puppet:///modules/another/good.json'
           }
@@ -81,14 +81,14 @@ describe 'elasticsearch::template', :with_cleanup do
             java_install => true
           }
 
-          elasticsearch::instance { 'es-01':
+          elasticsearch6::instance { 'es-01':
             config => {
               'node.name' => 'elasticsearch001',
               'http.port' => '#{test_settings['port_a']}'
             }
           }
 
-          elasticsearch::template { 'foo':
+          elasticsearch6::template { 'foo':
             ensure => 'present',
             content => '#{JSON.dump(test_settings['template'])}'
           }
@@ -133,14 +133,14 @@ describe 'elasticsearch::template', :with_cleanup do
           java_install => true
         }
 
-        elasticsearch::instance { 'es-01':
+        elasticsearch6::instance { 'es-01':
           config => {
             'node.name' => 'elasticsearch001',
             'http.port' => '#{test_settings['port_a']}'
           }
         }
 
-        elasticsearch::template { 'foo':
+        elasticsearch6::template { 'foo':
           ensure => 'present',
           file => 'puppet:///modules/another/bad.json'
         }

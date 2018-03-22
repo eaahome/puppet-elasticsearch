@@ -18,7 +18,7 @@ describe 'elasticsearch 5.x', :if => is_5x_capable? do
           restart_on_change => true,
         }
 
-        elasticsearch::instance { 'es-01':
+        elasticsearch6::instance { 'es-01':
           config => {
             'node.name' => 'elasticsearch001',
             'http.port' => '#{test_settings['port_a']}'

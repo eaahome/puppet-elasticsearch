@@ -1,5 +1,5 @@
 ---
-elasticsearch::instances:
+elasticsearch6::instances:
   es-hiera-multiple-1:
     config:
       node.name: 'es-hiera-multiple-1'

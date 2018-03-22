@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'elasticsearch::service::init', :type => 'define' do
+describe 'elasticsearch6::service::init', :type => 'define' do
 
   let :facts do {
     :operatingsystem => 'CentOS',

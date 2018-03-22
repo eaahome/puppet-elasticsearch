@@ -5,12 +5,12 @@
 # definitions or other modules.
 #
 # @example importing this class into other classes to use its functionality:
-#   class { 'elasticsearch::config': }
+#   class { 'elasticsearch6::config': }
 #
 # @author Richard Pijnenburg <richard.pijnenburg@elasticsearch.com>
 # @author Tyler Langlois <tyler.langlois@elastic.co>
 #
-class elasticsearch::config {
+class elasticsearch6::config {
 
   #### Configuration
 
@@ -19,47 +19,47 @@ class elasticsearch::config {
     cwd  => '/',
   }
 
-  if ( $elasticsearch::ensure == 'present' ) {
+  if ( $elasticsearch6::ensure == 'present' ) {
 
     file {
-      $elasticsearch::configdir:
+      $elasticsearch6::configdir:
         ensure => 'directory',
-        group  => $elasticsearch::elasticsearch_group,
-        owner  => $elasticsearch::elasticsearch_user,
+        group  => $elasticsearch6::elasticsearch_group,
+        owner  => $elasticsearch6::elasticsearch_user,
         mode   => '0755';
-      $elasticsearch::datadir:
+      $elasticsearch6::datadir:
         ensure => 'directory',
-        group  => $elasticsearch::elasticsearch_group,
-        owner  => $elasticsearch::elasticsearch_user;
-      $elasticsearch::logdir:
+        group  => $elasticsearch6::elasticsearch_group,
+        owner  => $elasticsearch6::elasticsearch_user;
+      $elasticsearch6::logdir:
         ensure  => 'directory',
         group   => undef,
-        owner   => $elasticsearch::elasticsearch_user,
+        owner   => $elasticsearch6::elasticsearch_user,
         mode    => '0755',
         recurse => true;
-      $elasticsearch::plugindir:
+      $elasticsearch6::plugindir:
         ensure => 'directory',
-        group  => $elasticsearch::elasticsearch_group,
-        owner  => $elasticsearch::elasticsearch_user,
+        group  => $elasticsearch6::elasticsearch_group,
+        owner  => $elasticsearch6::elasticsearch_user,
         mode   => 'o+Xr';
-      "${elasticsearch::homedir}/lib":
+      "${elasticsearch6::homedir}/lib":
         ensure  => 'directory',
         group   => '0',
         owner   => 'root',
         recurse => true;
-      $elasticsearch::params::homedir:
+      $elasticsearch6::params::homedir:
         ensure => 'directory',
-        group  => $elasticsearch::elasticsearch_group,
-        owner  => $elasticsearch::elasticsearch_user;
-      "${elasticsearch::params::homedir}/templates_import":
+        group  => $elasticsearch6::elasticsearch_group,
+        owner  => $elasticsearch6::elasticsearch_user;
+      "${elasticsearch6::params::homedir}/templates_import":
         ensure => 'directory',
-        group  => $elasticsearch::elasticsearch_group,
-        owner  => $elasticsearch::elasticsearch_user,
+        group  => $elasticsearch6::elasticsearch_group,
+        owner  => $elasticsearch6::elasticsearch_user,
         mode   => '0755';
-      "${elasticsearch::params::homedir}/scripts":
+      "${elasticsearch6::params::homedir}/scripts":
         ensure => 'directory',
-        group  => $elasticsearch::elasticsearch_group,
-        owner  => $elasticsearch::elasticsearch_user,
+        group  => $elasticsearch6::elasticsearch_group,
+        owner  => $elasticsearch6::elasticsearch_user,
         mode   => '0755';
       '/etc/elasticsearch/elasticsearch.yml':
         ensure => 'absent';
@@ -73,18 +73,18 @@ class elasticsearch::config {
         ensure => 'absent';
     }
 
-    if $elasticsearch::params::pid_dir {
-      file { $elasticsearch::params::pid_dir:
+    if $elasticsearch6::params::pid_dir {
+      file { $elasticsearch6::params::pid_dir:
         ensure  => 'directory',
         group   => undef,
-        owner   => $elasticsearch::elasticsearch_user,
+        owner   => $elasticsearch6::elasticsearch_user,
         recurse => true,
       }
 
-      if ($elasticsearch::service_providers == 'systemd') {
-        $group = $elasticsearch::elasticsearch_group
-        $user = $elasticsearch::elasticsearch_user
-        $pid_dir = $elasticsearch::params::pid_dir
+      if ($elasticsearch6::service_providers == 'systemd') {
+        $group = $elasticsearch6::elasticsearch_group
+        $user = $elasticsearch6::elasticsearch_user
+        $pid_dir = $elasticsearch6::params::pid_dir
 
         file { '/usr/lib/tmpfiles.d/elasticsearch.conf':
           ensure  => 'file',
@@ -95,16 +95,16 @@ class elasticsearch::config {
       }
     }
 
-    if ($elasticsearch::service_providers == 'systemd') {
+    if ($elasticsearch6::service_providers == 'systemd') {
       # Mask default unit (from package)
       exec { 'systemctl mask elasticsearch.service':
         unless => 'test `systemctl is-enabled elasticsearch.service` = masked',
       }
     }
 
-    if $elasticsearch::params::defaults_location {
-      augeas { "${elasticsearch::params::defaults_location}/elasticsearch":
-        incl    => "${elasticsearch::params::defaults_location}/elasticsearch",
+    if $elasticsearch6::params::defaults_location {
+      augeas { "${elasticsearch6::params::defaults_location}/elasticsearch":
+        incl    => "${elasticsearch6::params::defaults_location}/elasticsearch",
         lens    => 'Shellvars.lns',
         changes => [
           'rm CONF_FILE',
@@ -114,38 +114,38 @@ class elasticsearch::config {
       }
     }
 
-    if $::elasticsearch::security_plugin != undef and ($::elasticsearch::security_plugin in ['shield', 'x-pack']) {
-      file { "/etc/elasticsearch/${::elasticsearch::security_plugin}" :
+    if $::elasticsearch6::security_plugin != undef and ($::elasticsearch6::security_plugin in ['shield', 'x-pack']) {
+      file { "/etc/elasticsearch/${::elasticsearch6::security_plugin}" :
         ensure => 'directory',
       }
     }
 
     # Define logging config file for the in-use security plugin
-    if $::elasticsearch::security_logging_content != undef or $::elasticsearch::security_logging_source != undef {
-      if $::elasticsearch::security_plugin == undef or ! ($::elasticsearch::security_plugin in ['shield', 'x-pack']) {
-        fail("\"${::elasticsearch::security_plugin}\" is not a valid security_plugin parameter value")
+    if $::elasticsearch6::security_logging_content != undef or $::elasticsearch6::security_logging_source != undef {
+      if $::elasticsearch6::security_plugin == undef or ! ($::elasticsearch6::security_plugin in ['shield', 'x-pack']) {
+        fail("\"${::elasticsearch6::security_plugin}\" is not a valid security_plugin parameter value")
       }
 
-      $_security_logging_file = $::elasticsearch::security_plugin ? {
+      $_security_logging_file = $::elasticsearch6::security_plugin ? {
         'shield' => 'logging.yml',
         default => 'log4j2.properties'
       }
 
-      file { "/etc/elasticsearch/${::elasticsearch::security_plugin}/${_security_logging_file}" :
-        content => $::elasticsearch::security_logging_content,
-        source  => $::elasticsearch::security_logging_source,
+      file { "/etc/elasticsearch/${::elasticsearch6::security_plugin}/${_security_logging_file}" :
+        content => $::elasticsearch6::security_logging_content,
+        source  => $::elasticsearch6::security_logging_source,
       }
     }
 
-  } elsif ( $elasticsearch::ensure == 'absent' ) {
+  } elsif ( $elasticsearch6::ensure == 'absent' ) {
 
-    file { $elasticsearch::plugindir:
+    file { $elasticsearch6::plugindir:
       ensure => 'absent',
       force  => true,
       backup => false,
     }
 
-    file { "${elasticsearch::configdir}/jvm.options":
+    file { "${elasticsearch6::configdir}/jvm.options":
       ensure => 'absent',
     }
 

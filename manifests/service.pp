@@ -40,19 +40,19 @@
 # @author Richard Pijnenburg <richard.pijnenburg@elasticsearch.com>
 # @author Tyler Langlois <tyler.langlois@elastic.co>
 #
-define elasticsearch::service(
-  $ensure             = $elasticsearch::ensure,
+define elasticsearch6::service(
+  $ensure             = $elasticsearch6::ensure,
   $init_defaults      = undef,
   $init_defaults_file = undef,
   $init_template      = undef,
   $service_flags      = undef,
-  $status             = $elasticsearch::status,
+  $status             = $elasticsearch6::status,
 ) {
 
-  case $elasticsearch::real_service_provider {
+  case $elasticsearch6::real_service_provider {
 
     'init': {
-      elasticsearch::service::init { $name:
+      elasticsearch6::service::init { $name:
         ensure             => $ensure,
         status             => $status,
         init_defaults_file => $init_defaults_file,
@@ -61,7 +61,7 @@ define elasticsearch::service(
       }
     }
     'openbsd': {
-      elasticsearch::service::openbsd { $name:
+      elasticsearch6::service::openbsd { $name:
         ensure        => $ensure,
         status        => $status,
         init_template => $init_template,
@@ -69,7 +69,7 @@ define elasticsearch::service(
       }
     }
     'systemd': {
-      elasticsearch::service::systemd { $name:
+      elasticsearch6::service::systemd { $name:
         ensure             => $ensure,
         status             => $status,
         init_defaults_file => $init_defaults_file,
@@ -78,7 +78,7 @@ define elasticsearch::service(
       }
     }
     'openrc': {
-      elasticsearch::service::openrc { $name:
+      elasticsearch6::service::openrc { $name:
         ensure             => $ensure,
         status             => $status,
         init_defaults_file => $init_defaults_file,
@@ -87,7 +87,7 @@ define elasticsearch::service(
       }
     }
     default: {
-      fail("Unknown service provider ${elasticsearch::real_service_provider}")
+      fail("Unknown service provider ${elasticsearch6::real_service_provider}")
     }
 
   }

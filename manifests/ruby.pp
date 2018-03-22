@@ -2,7 +2,7 @@
 # the ones we know about: http://www.elasticsearch.org/guide/clients/
 #
 # @example install the elasticsearch ruby library
-#   elasticsearch::ruby { 'elasticsearch': }
+#   elasticsearch6::ruby { 'elasticsearch': }
 #
 # @param ensure [String]
 #   Controls if the managed resources shall be `present` or `absent`.
@@ -16,7 +16,7 @@
 # @author Richard Pijnenburg <richard.pijnenburg@elasticsearch.com>
 # @author Tyler Langlois <tyler.langlois@elastic.co>
 #
-define elasticsearch::ruby (
+define elasticsearch6::ruby (
   $ensure = 'present'
 ) {
 

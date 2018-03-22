@@ -2,7 +2,7 @@ require 'spec_helper_acceptance'
 require 'json'
 
 # rubocop:disable Metrics/BlockLength
-describe 'elasticsearch::datadir' do
+describe 'elasticsearch6::datadir' do
   describe 'single data dir from class', :with_cleanup do
     describe 'manifest' do
       pp = <<-EOS
@@ -17,7 +17,7 @@ describe 'elasticsearch::datadir' do
           datadir => '/var/lib/elasticsearch-data'
         }
 
-        elasticsearch::instance { 'es-01':
+        elasticsearch6::instance { 'es-01':
           config => {
             'node.name' => 'elasticsearch001',
             'http.port' => '#{test_settings['port_a']}'
@@ -75,7 +75,7 @@ describe 'elasticsearch::datadir' do
           java_install => true
         }
 
-        elasticsearch::instance { 'es-01':
+        elasticsearch6::instance { 'es-01':
           config => {
             'node.name' => 'elasticsearch001',
             'http.port' => '#{test_settings['port_a']}'
@@ -138,7 +138,7 @@ describe 'elasticsearch::datadir' do
           ]
         }
 
-        elasticsearch::instance { 'es-01':
+        elasticsearch6::instance { 'es-01':
           config => {
             'node.name' => 'elasticsearch001',
             'http.port' => '#{test_settings['port_a']}'
@@ -203,7 +203,7 @@ describe 'elasticsearch::datadir' do
           java_install => true
         }
 
-        elasticsearch::instance { 'es-01':
+        elasticsearch6::instance { 'es-01':
           config => {
             'node.name' => 'elasticsearch001',
             'http.port' => '#{test_settings['port_a']}'

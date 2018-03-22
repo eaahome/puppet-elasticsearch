@@ -35,7 +35,7 @@ RSpec.configure do |c|
         ensure      => 'absent',
         manage_repo => true,
       }
-      elasticsearch::instance { 'es-01': ensure => 'absent' }
+      elasticsearch6::instance { 'es-01': ensure => 'absent' }
 
       file { '/usr/share/elasticsearch/plugin':
         ensure  => 'absent',

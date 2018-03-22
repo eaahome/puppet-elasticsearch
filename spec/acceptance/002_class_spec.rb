@@ -16,7 +16,7 @@ describe '::elasticsearch' do
           java_install => true
         }
 
-        elasticsearch::instance { 'es-01':
+        elasticsearch6::instance { 'es-01':
           config => {
             'node.name' => 'elasticsearch001',
             'http.port' => '#{test_settings['port_a']}'
@@ -107,14 +107,14 @@ describe '::elasticsearch' do
           java_install => true
         }
 
-        elasticsearch::instance { 'es-01':
+        elasticsearch6::instance { 'es-01':
           config => {
             'node.name' => 'elasticsearch001',
             'http.port' => '#{test_settings['port_a']}'
           }
         }
 
-        elasticsearch::instance { 'es-02':
+        elasticsearch6::instance { 'es-02':
           config => {
             'node.name' => 'elasticsearch002',
             'http.port' => '#{test_settings['port_b']}'
@@ -199,8 +199,8 @@ describe '::elasticsearch' do
     it 'should run successfully' do
       pp = <<-EOS
         class { 'elasticsearch': ensure => 'absent' }
-        elasticsearch::instance { 'es-01': ensure => 'absent' }
-        elasticsearch::instance { 'es-02': ensure => 'absent' }
+        elasticsearch6::instance { 'es-01': ensure => 'absent' }
+        elasticsearch6::instance { 'es-02': ensure => 'absent' }
       EOS
 
       apply_manifest pp, :catch_failures => true

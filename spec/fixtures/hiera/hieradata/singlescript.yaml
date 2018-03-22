@@ -1,5 +1,5 @@
 ---
-elasticsearch::scripts:
+elasticsearch6::scripts:
   myscript:
     ensure: present
     source: puppet:///file/here

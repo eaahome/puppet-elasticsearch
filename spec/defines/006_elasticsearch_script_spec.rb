@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'elasticsearch::script', :type => 'define' do
+describe 'elasticsearch6::script', :type => 'define' do
   let :facts do {
     :operatingsystem => 'CentOS',
     :kernel => 'Linux',

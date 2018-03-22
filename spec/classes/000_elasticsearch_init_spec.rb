@@ -215,8 +215,8 @@ describe 'elasticsearch', :type => 'class' do
 
         case facts[:osfamily]
         when 'Debian'
-          it { should contain_class('elasticsearch::repo')
-            .that_requires('Anchor[elasticsearch::begin]') }
+          it { should contain_class('elasticsearch6::repo')
+            .that_requires('Anchor[elasticsearch6::begin]') }
           it { should contain_class('apt') }
           it { should contain_apt__source('elasticsearch')
             .with(
@@ -225,8 +225,8 @@ describe 'elasticsearch', :type => 'class' do
               :location => 'http://packages.elastic.co/elasticsearch/1.0/debian'
             ) }
         when 'RedHat'
-          it { should contain_class('elasticsearch::repo')
-            .that_requires('Anchor[elasticsearch::begin]') }
+          it { should contain_class('elasticsearch6::repo')
+            .that_requires('Anchor[elasticsearch6::begin]') }
           it { should contain_yumrepo('elasticsearch')
             .with(
               :baseurl => 'http://packages.elastic.co/elasticsearch/1.0/centos',
@@ -235,8 +235,8 @@ describe 'elasticsearch', :type => 'class' do
             ) }
           it { should contain_exec('elasticsearch_yumrepo_yum_clean') }
         when 'SuSE'
-          it { should contain_class('elasticsearch::repo')
-            .that_requires('Anchor[elasticsearch::begin]') }
+          it { should contain_class('elasticsearch6::repo')
+            .that_requires('Anchor[elasticsearch6::begin]') }
           it { should contain_exec('elasticsearch_suse_import_gpg') }
           it { should contain_zypprepo('elasticsearch')
             .with(
@@ -256,9 +256,9 @@ describe 'elasticsearch', :type => 'class' do
         end
 
         it { should contain_class(
-          'elasticsearch::package::pin'
+          'elasticsearch6::package::pin'
         ).that_comes_before(
-          'Class[elasticsearch::package]'
+          'Class[elasticsearch6::package]'
         ) }
 
         case facts[:osfamily]
@@ -324,12 +324,12 @@ describe 'elasticsearch', :type => 'class' do
       # init.pp
       it { should compile.with_all_deps }
       it { should contain_class('elasticsearch') }
-      it { should contain_anchor('elasticsearch::begin') }
-      it { should contain_class('elasticsearch::params') }
-      it { should contain_class('elasticsearch::package')
-        .that_requires('Anchor[elasticsearch::begin]') }
-      it { should contain_class('elasticsearch::config')
-        .that_requires('Class[elasticsearch::package]') }
+      it { should contain_anchor('elasticsearch6::begin') }
+      it { should contain_class('elasticsearch6::params') }
+      it { should contain_class('elasticsearch6::package')
+        .that_requires('Anchor[elasticsearch6::begin]') }
+      it { should contain_class('elasticsearch6::config')
+        .that_requires('Class[elasticsearch6::package]') }
 
       # Base directories
       it { should contain_file('/etc/elasticsearch') }

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'elasticsearch::role' do
+describe 'elasticsearch6::role' do
 
   let :facts do {
     :operatingsystem => 'CentOS',
@@ -60,10 +60,10 @@ describe 'elasticsearch::role' do
         class { 'elasticsearch':
           security_plugin => 'shield',
         }
-        elasticsearch::instance { 'es-security-role': }
-        elasticsearch::plugin { 'shield': instances => 'es-security-role' }
-        elasticsearch::template { 'foo': content => {"foo" => "bar"} }
-        elasticsearch::user { 'elastic':
+        elasticsearch6::instance { 'es-security-role': }
+        elasticsearch6::plugin { 'shield': instances => 'es-security-role' }
+        elasticsearch6::template { 'foo': content => {"foo" => "bar"} }
+        elasticsearch6::user { 'elastic':
           password => 'foobar',
           roles => ['elastic_role'],
         }
@@ -72,10 +72,10 @@ describe 'elasticsearch::role' do
       it { should contain_elasticsearch__plugin('shield') }
       it { should contain_elasticsearch__role('elastic_role')
         .that_comes_before([
-        'Elasticsearch::Template[foo]',
-        'Elasticsearch::User[elastic]'
+        'Elasticsearch6::Template[foo]',
+        'Elasticsearch6::User[elastic]'
       ]).that_requires([
-        'Elasticsearch::Plugin[shield]'
+        'Elasticsearch6::Plugin[shield]'
       ])}
 
       include_examples 'instance', 'es-security-role', :systemd
@@ -87,13 +87,13 @@ describe 'elasticsearch::role' do
         class { 'elasticsearch':
           security_plugin => 'shield',
         }
-        elasticsearch::instance { 'es-security-role': }
-        elasticsearch::plugin { 'shield':
+        elasticsearch6::instance { 'es-security-role': }
+        elasticsearch6::plugin { 'shield':
           ensure => 'absent',
           instances => 'es-security-role',
         }
-        elasticsearch::template { 'foo': content => {"foo" => "bar"} }
-        elasticsearch::user { 'elastic':
+        elasticsearch6::template { 'foo': content => {"foo" => "bar"} }
+        elasticsearch6::user { 'elastic':
           password => 'foobar',
           roles => ['elastic_role'],
         }
@@ -105,9 +105,9 @@ describe 'elasticsearch::role' do
       # https://github.com/rodjek/rspec-puppet/issues/418
       # it { should contain_elasticsearch__shield__role('elastic_role')
       #   .that_comes_before([
-      #   'Elasticsearch::Template[foo]',
-      #   'Elasticsearch::Plugin[shield]',
-      #   'Elasticsearch::Shield::User[elastic]'
+      #   'Elasticsearch6::Template[foo]',
+      #   'Elasticsearch6::Plugin[shield]',
+      #   'Elasticsearch6::Shield::User[elastic]'
       # ])}
     end
   end

@@ -2,7 +2,7 @@ require 'spec_helper_acceptance'
 require 'json'
 
 # rubocop:disable Metrics/BlockLength
-describe 'elasticsearch::instance' do
+describe 'elasticsearch6::instance' do
   describe 'two instances' do
     describe 'manifest' do
       pp = <<-EOS
@@ -16,14 +16,14 @@ describe 'elasticsearch::instance' do
           java_install => true
         }
 
-        elasticsearch::instance { 'es-01':
+        elasticsearch6::instance { 'es-01':
           config => {
             'node.name' => 'elasticsearch001',
             'http.port' => '#{test_settings['port_a']}'
           }
         }
 
-        elasticsearch::instance { 'es-02':
+        elasticsearch6::instance { 'es-02':
           config => {
             'node.name' => 'elasticsearch002',
             'http.port' => '#{test_settings['port_b']}'
@@ -123,14 +123,14 @@ describe 'elasticsearch::instance' do
           java_install => true
         }
 
-        elasticsearch::instance { 'es-01':
+        elasticsearch6::instance { 'es-01':
           config => {
             'node.name' => 'elasticsearch001',
             'http.port' => '#{test_settings['port_a']}'
           }
         }
 
-        elasticsearch::instance { 'es-02':
+        elasticsearch6::instance { 'es-02':
           ensure => 'absent'
         }
       EOS

@@ -130,48 +130,48 @@
 # @author Richard Pijnenburg <richard.pijnenburg@elasticsearch.com>
 # @author Tyler Langlois <tyler.langlois@elastic.co>
 #
-define elasticsearch::instance (
-  $ensure                        = $elasticsearch::ensure,
+define elasticsearch6::instance (
+  $ensure                        = $elasticsearch6::ensure,
   $ca_certificate                = undef,
   $certificate                   = undef,
   $config                        = undef,
   $configdir                     = undef,
-  $daily_rolling_date_pattern    = $elasticsearch::daily_rolling_date_pattern,
+  $daily_rolling_date_pattern    = $elasticsearch6::daily_rolling_date_pattern,
   $datadir                       = undef,
-  $datadir_instance_directories  = $elasticsearch::datadir_instance_directories,
+  $datadir_instance_directories  = $elasticsearch6::datadir_instance_directories,
   $deprecation_logging           = false,
   $deprecation_logging_level     = 'DEBUG',
-  $file_rolling_type             = $elasticsearch::file_rolling_type,
+  $file_rolling_type             = $elasticsearch6::file_rolling_type,
   $init_defaults                 = undef,
   $init_defaults_file            = undef,
-  $init_template                 = $elasticsearch::init_template,
-  $jvm_options                   = $elasticsearch::jvm_options,
+  $init_template                 = $elasticsearch6::init_template,
+  $jvm_options                   = $elasticsearch6::jvm_options,
   $keystore_password             = undef,
   $keystore_path                 = undef,
-  $log4j2_ensure                 = $elasticsearch::log4j2_ensure,
+  $log4j2_ensure                 = $elasticsearch6::log4j2_ensure,
   $logdir                        = undef,
   $logging_config                = undef,
   $logging_file                  = undef,
-  $logging_level                 = $elasticsearch::default_logging_level,
+  $logging_level                 = $elasticsearch6::default_logging_level,
   $logging_template              = undef,
-  $logging_yml_ensure            = $elasticsearch::logging_yml_ensure,
+  $logging_yml_ensure            = $elasticsearch6::logging_yml_ensure,
   $private_key                   = undef,
-  $purge_secrets                 = $elasticsearch::purge_secrets,
-  $rolling_file_max_backup_index = $elasticsearch::rolling_file_max_backup_index,
-  $rolling_file_max_file_size    = $elasticsearch::rolling_file_max_file_size,
+  $purge_secrets                 = $elasticsearch6::purge_secrets,
+  $rolling_file_max_backup_index = $elasticsearch6::rolling_file_max_backup_index,
+  $rolling_file_max_file_size    = $elasticsearch6::rolling_file_max_file_size,
   $secrets                       = undef,
-  $security_plugin               = $elasticsearch::security_plugin,
+  $security_plugin               = $elasticsearch6::security_plugin,
   $service_flags                 = undef,
   $ssl                           = false,
-  $status                        = $elasticsearch::status,
-  $system_key                    = $elasticsearch::system_key,
+  $status                        = $elasticsearch6::status,
+  $system_key                    = $elasticsearch6::system_key,
 ) {
 
-  require elasticsearch::params
+  require elasticsearch6::params
 
   File {
-    owner => $elasticsearch::elasticsearch_user,
-    group => $elasticsearch::elasticsearch_group,
+    owner => $elasticsearch6::elasticsearch_user,
+    group => $elasticsearch6::elasticsearch_group,
   }
 
   Exec {
@@ -190,14 +190,14 @@ define elasticsearch::instance (
     }
   }
 
-  $notify_service = $elasticsearch::restart_config_change ? {
-    true  => Elasticsearch::Service[$name],
+  $notify_service = $elasticsearch6::restart_config_change ? {
+    true  => Elasticsearch6::Service[$name],
     false => undef,
   }
 
   # Instance config directory
   if ($configdir == undef) {
-    $instance_configdir = "${elasticsearch::configdir}/${name}"
+    $instance_configdir = "${elasticsearch6::configdir}/${name}"
   } else {
     $instance_configdir = $configdir
   }
@@ -222,13 +222,13 @@ define elasticsearch::instance (
     if ($datadir == undef) {
       validate_bool($datadir_instance_directories)
       if ($datadir_instance_directories) {
-        if (is_array($elasticsearch::datadir)) {
-          $instance_datadir = array_suffix($elasticsearch::datadir, "/${name}")
+        if (is_array($elasticsearch6::datadir)) {
+          $instance_datadir = array_suffix($elasticsearch6::datadir, "/${name}")
         } else {
-          $instance_datadir = "${elasticsearch::datadir}/${name}"
+          $instance_datadir = "${elasticsearch6::datadir}/${name}"
         }
       } else {
-        $instance_datadir = $elasticsearch::datadir
+        $instance_datadir = $elasticsearch6::datadir
       }
     } else {
       $instance_datadir = $datadir
@@ -239,14 +239,14 @@ define elasticsearch::instance (
       $logging_source = $logging_file
       $logging_content = undef
       $_log4j_content = undef
-    } elsif ($elasticsearch::logging_file != undef) {
-      $logging_source = $elasticsearch::logging_file
+    } elsif ($elasticsearch6::logging_file != undef) {
+      $logging_source = $elasticsearch6::logging_file
       $logging_content = undef
       $_log4j_content = undef
     } else {
 
-      if(is_hash($elasticsearch::logging_config)) {
-        $main_logging_config = deep_implode($elasticsearch::logging_config)
+      if(is_hash($elasticsearch6::logging_config)) {
+        $main_logging_config = deep_implode($elasticsearch6::logging_config)
       } else {
         $main_logging_config = { }
       }
@@ -257,16 +257,16 @@ define elasticsearch::instance (
         $instance_logging_config = { }
       }
       $logging_hash = merge(
-        $elasticsearch::params::logging_defaults,
+        $elasticsearch6::params::logging_defaults,
         $main_logging_config,
         $instance_logging_config
       )
       if ($logging_template != undef ) {
         $logging_content = template($logging_template)
         $_log4j_content = template($logging_template)
-      } elsif ($elasticsearch::logging_template != undef) {
-        $logging_content = template($elasticsearch::logging_template)
-        $_log4j_content = template($elasticsearch::logging_template)
+      } elsif ($elasticsearch6::logging_template != undef) {
+        $logging_content = template($elasticsearch6::logging_template)
+        $_log4j_content = template($elasticsearch6::logging_template)
       } else {
         $logging_content = template("${module_name}/etc/elasticsearch/logging.yml.erb")
         $_log4j_content = template("${module_name}/etc/elasticsearch/log4j2.properties.erb")
@@ -274,8 +274,8 @@ define elasticsearch::instance (
       $logging_source = undef
     }
 
-    if ($elasticsearch::x_config != undef) {
-      $main_config = deep_implode($elasticsearch::x_config)
+    if ($elasticsearch6::x_config != undef) {
+      $main_config = deep_implode($elasticsearch6::x_config)
     } else {
       $main_config = { }
     }
@@ -290,7 +290,7 @@ define elasticsearch::instance (
 
     # Manage instance log directory
     if ($logdir == undef) {
-      $instance_logdir = "${elasticsearch::logdir}/${name}"
+      $instance_logdir = "${elasticsearch6::logdir}/${name}"
     } else {
       $instance_logdir = $logdir
     }
@@ -351,59 +351,59 @@ define elasticsearch::instance (
     exec { "mkdir_logdir_elasticsearch_${name}":
       command => "mkdir -p ${instance_logdir}",
       creates => $instance_logdir,
-      require => Class['elasticsearch::package'],
+      require => Class['elasticsearch6::package'],
       before  => File[$instance_logdir],
     }
 
     file { $instance_logdir:
       ensure  => 'directory',
-      owner   => $elasticsearch::elasticsearch_user,
+      owner   => $elasticsearch6::elasticsearch_user,
       group   => undef,
       mode    => '0755',
-      require => Class['elasticsearch::package'],
-      before  => Elasticsearch::Service[$name],
+      require => Class['elasticsearch6::package'],
+      before  => Elasticsearch6::Service[$name],
     }
 
     if ($datadir_instance_directories) {
       exec { "mkdir_datadir_elasticsearch_${name}":
         command => "mkdir -p ${dirs}",
         creates => $instance_datadir,
-        require => Class['elasticsearch::package'],
-        before  => Elasticsearch::Service[$name],
+        require => Class['elasticsearch6::package'],
+        before  => Elasticsearch6::Service[$name],
       }
       -> file { $instance_datadir:
         ensure  => 'directory',
-        owner   => $elasticsearch::elasticsearch_user,
+        owner   => $elasticsearch6::elasticsearch_user,
         group   => undef,
         mode    => '0755',
-        require => Class['elasticsearch::package'],
-        before  => Elasticsearch::Service[$name],
+        require => Class['elasticsearch6::package'],
+        before  => Elasticsearch6::Service[$name],
       }
     }
 
     exec { "mkdir_configdir_elasticsearch_${name}":
       command => "mkdir -p ${instance_configdir}",
-      creates => $elasticsearch::configdir,
-      require => Class['elasticsearch::package'],
-      before  => Elasticsearch::Service[$name],
+      creates => $elasticsearch6::configdir,
+      require => Class['elasticsearch6::package'],
+      before  => Elasticsearch6::Service[$name],
     }
 
     file { $instance_configdir:
       ensure  => 'directory',
       mode    => '0755',
-      purge   => $elasticsearch::purge_configdir,
-      force   => $elasticsearch::purge_configdir,
-      require => [ Exec["mkdir_configdir_elasticsearch_${name}"], Class['elasticsearch::package'] ],
-      before  => Elasticsearch::Service[$name],
+      purge   => $elasticsearch6::purge_configdir,
+      force   => $elasticsearch6::purge_configdir,
+      require => [ Exec["mkdir_configdir_elasticsearch_${name}"], Class['elasticsearch6::package'] ],
+      before  => Elasticsearch6::Service[$name],
     }
 
     validate_array($jvm_options)
     file { "${instance_configdir}/jvm.options":
-      before  => Elasticsearch::Service[$name],
+      before  => Elasticsearch6::Service[$name],
       content => template("${module_name}/etc/elasticsearch/jvm.options.erb"),
-      group   => $elasticsearch::elasticsearch_group,
+      group   => $elasticsearch6::elasticsearch_group,
       notify  => $notify_service,
-      owner   => $elasticsearch::elasticsearch_user,
+      owner   => $elasticsearch6::elasticsearch_user,
     }
 
     file {
@@ -413,32 +413,32 @@ define elasticsearch::instance (
         source  => $logging_source,
         mode    => '0644',
         notify  => $notify_service,
-        require => Class['elasticsearch::package'],
-        before  => Elasticsearch::Service[$name];
+        require => Class['elasticsearch6::package'],
+        before  => Elasticsearch6::Service[$name];
       "${instance_configdir}/log4j2.properties":
         ensure  => $log4j2_ensure,
         content => $_log4j_content,
         source  => $logging_source,
         mode    => '0644',
         notify  => $notify_service,
-        require => Class['elasticsearch::package'],
-        before  => Elasticsearch::Service[$name];
+        require => Class['elasticsearch6::package'],
+        before  => Elasticsearch6::Service[$name];
     }
 
     file { "${instance_configdir}/scripts":
       ensure => 'link',
-      target => "${elasticsearch::params::homedir}/scripts",
+      target => "${elasticsearch6::params::homedir}/scripts",
     }
 
     if $security_plugin != undef {
       file { "${instance_configdir}/${security_plugin}":
         ensure  => 'directory',
         mode    => '0755',
-        source  => "${elasticsearch::configdir}/${security_plugin}",
+        source  => "${elasticsearch6::configdir}/${security_plugin}",
         recurse => 'remote',
         owner   => 'root',
         group   => '0',
-        before  => Elasticsearch::Service[$name],
+        before  => Elasticsearch6::Service[$name],
         notify  => $notify_service,
       }
     }
@@ -448,7 +448,7 @@ define elasticsearch::instance (
         ensure  => 'file',
         source  => $system_key,
         mode    => '0400',
-        before  => Elasticsearch::Service[$name],
+        before  => Elasticsearch6::Service[$name],
         require => File["${instance_configdir}/${security_plugin}"],
       }
     }
@@ -469,8 +469,8 @@ define elasticsearch::instance (
       fail ('Only one of $init_defaults and $init_defaults_file should be defined')
     }
 
-    if (is_hash($elasticsearch::init_defaults)) {
-      $global_init_defaults = $elasticsearch::init_defaults
+    if (is_hash($elasticsearch6::init_defaults)) {
+      $global_init_defaults = $elasticsearch6::init_defaults
     } else {
       $global_init_defaults = { }
     }
@@ -478,7 +478,7 @@ define elasticsearch::instance (
     $instance_init_defaults_main = {
       'CONF_DIR'     => $instance_configdir,
       'ES_PATH_CONF' => $instance_configdir,
-      'ES_HOME'      => $elasticsearch::params::homedir,
+      'ES_HOME'      => $elasticsearch6::params::homedir,
       'LOG_DIR'      => $instance_logdir,
     }
 
@@ -488,15 +488,15 @@ define elasticsearch::instance (
       $instance_init_defaults = { }
     }
     $init_defaults_new = merge(
-      { 'DATA_DIR'  => $elasticsearch::params::datadir },
+      { 'DATA_DIR'  => $elasticsearch6::params::datadir },
       { 'ES_JVM_OPTIONS' => "${instance_configdir}/jvm.options" },
       $global_init_defaults,
       $instance_init_defaults_main,
       $instance_init_defaults
     )
 
-    $user = $elasticsearch::elasticsearch_user
-    $group = $elasticsearch::elasticsearch_group
+    $user = $elasticsearch6::elasticsearch_user
+    $group = $elasticsearch6::elasticsearch_group
 
     datacat_fragment { "main_config_${name}":
       target => "${instance_configdir}/elasticsearch.yml",
@@ -506,15 +506,15 @@ define elasticsearch::instance (
     datacat { "${instance_configdir}/elasticsearch.yml":
       template => "${module_name}/etc/elasticsearch/elasticsearch.yml.erb",
       notify   => $notify_service,
-      require  => Class['elasticsearch::package'],
-      owner    => $elasticsearch::elasticsearch_user,
-      group    => $elasticsearch::elasticsearch_group,
+      require  => Class['elasticsearch6::package'],
+      owner    => $elasticsearch6::elasticsearch_user,
+      group    => $elasticsearch6::elasticsearch_group,
       mode     => '0440',
     }
 
-    if ($elasticsearch::secrets != undef or $secrets != undef) {
-      if ($elasticsearch::secrets != undef) {
-        $main_secrets = $elasticsearch::secrets
+    if ($elasticsearch6::secrets != undef or $secrets != undef) {
+      if ($elasticsearch6::secrets != undef) {
+        $main_secrets = $elasticsearch6::secrets
       } else {
         $main_secrets = {}
       }
@@ -534,7 +534,7 @@ define elasticsearch::instance (
       }
     }
 
-    $require_service = Class['elasticsearch::package']
+    $require_service = Class['elasticsearch6::package']
     $before_service  = undef
 
   } else {
@@ -551,7 +551,7 @@ define elasticsearch::instance (
     $init_defaults_new = {}
   }
 
-  elasticsearch::service { $name:
+  elasticsearch6::service { $name:
     ensure             => $ensure,
     status             => $status,
     service_flags      => $service_flags,

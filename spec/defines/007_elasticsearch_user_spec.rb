@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'elasticsearch::user' do
+describe 'elasticsearch6::user' do
 
   let :facts do {
     :operatingsystem => 'CentOS',
@@ -44,10 +44,10 @@ describe 'elasticsearch::user' do
         class { 'elasticsearch':
           security_plugin => 'shield',
         }
-        elasticsearch::instance { 'es-security-user': }
-        elasticsearch::plugin { 'shield': instances => 'es-security-user' }
-        elasticsearch::template { 'foo': content => {"foo" => "bar"} }
-        elasticsearch::role { 'test_role':
+        elasticsearch6::instance { 'es-security-user': }
+        elasticsearch6::plugin { 'shield': instances => 'es-security-user' }
+        elasticsearch6::template { 'foo': content => {"foo" => "bar"} }
+        elasticsearch6::role { 'test_role':
           privileges => {
             'cluster' => 'monitor',
             'indices' => {
@@ -72,10 +72,10 @@ describe 'elasticsearch::user' do
       ) }
       it { should contain_elasticsearch__user('elastic')
         .that_comes_before([
-        'Elasticsearch::Template[foo]'
+        'Elasticsearch6::Template[foo]'
       ]).that_requires([
-        'Elasticsearch::Plugin[shield]',
-        'Elasticsearch::Role[test_role]'
+        'Elasticsearch6::Plugin[shield]',
+        'Elasticsearch6::Role[test_role]'
       ])}
 
       include_examples 'instance', 'es-security-user', :systemd
@@ -87,13 +87,13 @@ describe 'elasticsearch::user' do
         class { 'elasticsearch':
           security_plugin => 'shield',
         }
-        elasticsearch::instance { 'es-security-user': }
-        elasticsearch::plugin { 'shield':
+        elasticsearch6::instance { 'es-security-user': }
+        elasticsearch6::plugin { 'shield':
           ensure => 'absent',
           instances => 'es-security-user',
         }
-        elasticsearch::template { 'foo': content => {"foo" => "bar"} }
-        elasticsearch::role { 'test_role':
+        elasticsearch6::template { 'foo': content => {"foo" => "bar"} }
+        elasticsearch6::role { 'test_role':
           privileges => {
             'cluster' => 'monitor',
             'indices' => {
@@ -118,10 +118,10 @@ describe 'elasticsearch::user' do
       ) }
       it { should contain_elasticsearch__user('elastic')
         .that_comes_before([
-          'Elasticsearch::Template[foo]',
-          'Elasticsearch::Plugin[shield]'
+          'Elasticsearch6::Template[foo]',
+          'Elasticsearch6::Plugin[shield]'
       ]).that_requires([
-        'Elasticsearch::Role[test_role]'
+        'Elasticsearch6::Role[test_role]'
       ])}
 
       include_examples 'instance', 'es-security-user', :systemd

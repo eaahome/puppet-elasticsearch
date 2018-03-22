@@ -1,5 +1,5 @@
 ---
-elasticsearch::templates:
+elasticsearch6::templates:
   foo:
     ensure: 'present'
     content:

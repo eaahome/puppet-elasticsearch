@@ -4,11 +4,11 @@
 # @summary Controls package pinning for the Elasticsearch package.
 #
 # @example This class may be imported by other classes to use its functionality
-#   class { 'elasticsearch::package::pin': }
+#   class { 'elasticsearch6::package::pin': }
 #
 # @author Tyler Langlois <tyler.langlois@elastic.co>
 #
-class elasticsearch::package::pin {
+class elasticsearch6::package::pin {
 
   Exec {
     path => [ '/bin', '/usr/bin', '/usr/local/bin' ],
@@ -19,15 +19,15 @@ class elasticsearch::package::pin {
     'Debian': {
       include ::apt
 
-      if ($elasticsearch::ensure == 'absent') {
-        apt::pin { $elasticsearch::package_name:
-          ensure => $elasticsearch::ensure,
+      if ($elasticsearch6::ensure == 'absent') {
+        apt::pin { $elasticsearch6::package_name:
+          ensure => $elasticsearch6::ensure,
         }
-      } elsif ($elasticsearch::version != false) {
-        apt::pin { $elasticsearch::package_name:
-          ensure   => $elasticsearch::ensure,
-          packages => $elasticsearch::package_name,
-          version  => $elasticsearch::version,
+      } elsif ($elasticsearch6::version != false) {
+        apt::pin { $elasticsearch6::package_name:
+          ensure   => $elasticsearch6::ensure,
+          packages => $elasticsearch6::package_name,
+          version  => $elasticsearch6::version,
           priority => 1000,
         }
       }
@@ -35,7 +35,7 @@ class elasticsearch::package::pin {
     }
     'RedHat', 'Linux': {
 
-      if ($elasticsearch::ensure == 'absent') {
+      if ($elasticsearch6::ensure == 'absent') {
         $_versionlock = '/etc/yum/pluginconf.d/versionlock.list'
         $_lock_line = '0:elasticsearch-'
         exec { 'elasticsearch_purge_versionlock.list':
@@ -45,10 +45,10 @@ class elasticsearch::package::pin {
             "grep -F '${_lock_line}' ${_versionlock}",
           ],
         }
-      } elsif ($elasticsearch::version != false) {
+      } elsif ($elasticsearch6::version != false) {
         yum::versionlock {
-          "0:elasticsearch-${elasticsearch::pkg_version}.noarch":
-            ensure => $elasticsearch::ensure,
+          "0:elasticsearch-${elasticsearch6::pkg_version}.noarch":
+            ensure => $elasticsearch6::ensure,
         }
       }
 

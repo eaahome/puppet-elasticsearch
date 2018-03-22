@@ -19,14 +19,14 @@ shared_examples 'plugin behavior' do |version, user, plugin, offline, config|
             restart_on_change => true,
           }
 
-          elasticsearch::instance { 'es-01':
+          elasticsearch6::instance { 'es-01':
             config => {
               'node.name' => 'elasticsearch001',
               'http.port' => '#{test_settings['port_a']}'
             }
           }
 
-          elasticsearch::plugin { 'mobz/elasticsearch-head':
+          elasticsearch6::plugin { 'mobz/elasticsearch-head':
              instances => 'es-01'
           }
         EOS
@@ -84,14 +84,14 @@ shared_examples 'plugin behavior' do |version, user, plugin, offline, config|
             java_install => true
           }
 
-          elasticsearch::instance { 'es-01':
+          elasticsearch6::instance { 'es-01':
             config => {
               'node.name' => 'elasticsearch001',
               'http.port' => '#{test_settings['port_a']}'
             }
           }
 
-          elasticsearch::plugin { 'elasticsearch/non-existing':
+          elasticsearch6::plugin { 'elasticsearch/non-existing':
             instances => 'es-01'
           }
         EOS
@@ -119,14 +119,14 @@ shared_examples 'plugin behavior' do |version, user, plugin, offline, config|
             restart_on_change => true,
           }
 
-          elasticsearch::instance { 'es-01':
+          elasticsearch6::instance { 'es-01':
             config => {
               'node.name' => 'elasticsearch001',
               'http.port' => '#{test_settings['port_a']}'
             }
           }
 
-          elasticsearch::plugin { '#{plugin[:prefix]}#{plugin[:name]}/#{plugin[:old]}':
+          elasticsearch6::plugin { '#{plugin[:prefix]}#{plugin[:name]}/#{plugin[:old]}':
             instances => 'es-01'
           }
         EOS
@@ -187,14 +187,14 @@ shared_examples 'plugin behavior' do |version, user, plugin, offline, config|
               restart_on_change => true,
             }
 
-            elasticsearch::instance { 'es-01':
+            elasticsearch6::instance { 'es-01':
               config => {
                 'node.name' => 'elasticsearch001',
                 'http.port' => '#{test_settings['port_a']}'
               }
             }
 
-            elasticsearch::plugin { '#{plugin[:prefix]}#{plugin[:name]}/#{plugin[:new]}':
+            elasticsearch6::plugin { '#{plugin[:prefix]}#{plugin[:name]}/#{plugin[:new]}':
               instances => 'es-01'
             }
           EOS
@@ -245,14 +245,14 @@ shared_examples 'plugin behavior' do |version, user, plugin, offline, config|
             restart_on_change => true,
           }
 
-          elasticsearch::instance { 'es-01':
+          elasticsearch6::instance { 'es-01':
             config => {
               'node.name' => 'elasticsearch001',
               'http.port' => '#{test_settings['port_a']}'
             }
           }
 
-          elasticsearch::plugin { '#{offline}':
+          elasticsearch6::plugin { '#{offline}':
             source => 'puppet:///modules/another/elasticsearch-#{offline}.zip',
             instances => 'es-01'
           }
@@ -299,14 +299,14 @@ shared_examples 'plugin behavior' do |version, user, plugin, offline, config|
             restart_on_change => true,
           }
 
-          elasticsearch::instance { 'es-01':
+          elasticsearch6::instance { 'es-01':
             config => {
               'node.name' => 'elasticsearch001',
               'http.port' => '#{test_settings['port_a']}'
             }
           }
 
-          elasticsearch::plugin { 'hq':
+          elasticsearch6::plugin { 'hq':
             url => 'https://github.com/royrusso/elasticsearch-HQ/archive/v2.0.3.zip',
             instances => 'es-01'
           }
@@ -342,7 +342,7 @@ shared_examples 'plugin behavior' do |version, user, plugin, offline, config|
   end
 end
 
-describe 'elasticsearch::plugin' do
+describe 'elasticsearch6::plugin' do
   before :all do
     shell "mkdir -p #{default['distmoduledir']}/another/files"
 

@@ -16,7 +16,7 @@
 # @author Richard Pijnenburg <richard.pijnenburg@elasticsearch.com>
 # @author Tyler Langlois <tyler.langlois@elastic.co>
 #
-class elasticsearch::params {
+class elasticsearch6::params {
 
   $restart_on_change = false
 

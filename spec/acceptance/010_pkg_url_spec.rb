@@ -2,7 +2,7 @@ require 'spec_helper_acceptance'
 require 'json'
 
 # rubocop:disable Metrics/BlockLength
-describe 'elasticsearch::package_url' do
+describe 'elasticsearch6::package_url' do
   before :all do
     shell "mkdir -p #{default['distmoduledir']}/another/files"
 
@@ -25,7 +25,7 @@ describe 'elasticsearch::package_url' do
           }
         }
 
-        elasticsearch::instance{ 'es-01': }
+        elasticsearch6::instance{ 'es-01': }
       EOS
 
       it 'applies cleanly ' do
@@ -80,7 +80,7 @@ describe 'elasticsearch::package_url' do
           }
         }
 
-        elasticsearch::instance { 'es-01': }
+        elasticsearch6::instance { 'es-01': }
       EOS
 
       it 'applies cleanly ' do
@@ -136,7 +136,7 @@ describe 'elasticsearch::package_url' do
           }
         }
 
-        elasticsearch::instance { 'es-01': }
+        elasticsearch6::instance { 'es-01': }
       EOS
 
       it 'applies cleanly ' do

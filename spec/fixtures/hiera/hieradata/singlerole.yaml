@@ -1,5 +1,5 @@
 ---
-elasticsearch::roles:
+elasticsearch6::roles:
   admin:
     ensure: present
     privileges:

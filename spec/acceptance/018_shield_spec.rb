@@ -19,8 +19,8 @@ describe 'elasticsearch shield', :with_certificates, :then_purge do
         security_plugin => 'shield',
       }
 
-      elasticsearch::plugin { 'elasticsearch/license/latest' :  }
-      elasticsearch::plugin { 'elasticsearch/shield/latest' : }
+      elasticsearch6::plugin { 'elasticsearch/license/latest' :  }
+      elasticsearch6::plugin { 'elasticsearch/shield/latest' : }
     EOF
   end
 
@@ -28,15 +28,15 @@ describe 'elasticsearch shield', :with_certificates, :then_purge do
     describe 'single instance manifest' do
       let :single_manifest do
         base_manifest + <<-EOF
-          elasticsearch::instance { ['es-01'] :  }
+          elasticsearch6::instance { ['es-01'] :  }
 
-          Elasticsearch::Plugin { instances => ['es-01'],  }
+          Elasticsearch6::Plugin { instances => ['es-01'],  }
 
-          elasticsearch::user { '#{test_settings['security_user']}':
+          elasticsearch6::user { '#{test_settings['security_user']}':
             password => '#{test_settings['security_password']}',
             roles    => ['admin'],
           }
-          elasticsearch::user { '#{test_settings['security_user']}pwchange':
+          elasticsearch6::user { '#{test_settings['security_user']}pwchange':
             password => '#{test_settings['security_hashed_password']}',
             roles    => ['admin'],
           }
@@ -101,12 +101,12 @@ describe 'elasticsearch shield', :with_certificates, :then_purge do
     describe 'password change manifest' do
       let :passwd_manifest do
         base_manifest + <<-EOF
-          elasticsearch::instance { ['es-01'] :  }
+          elasticsearch6::instance { ['es-01'] :  }
 
-          Elasticsearch::Plugin { instances => ['es-01'],  }
+          Elasticsearch6::Plugin { instances => ['es-01'],  }
 
           notify { 'change password' : } ~>
-          elasticsearch::user { '#{test_settings['security_user']}pwchange':
+          elasticsearch6::user { '#{test_settings['security_user']}pwchange':
             password => '#{test_settings['security_password'][0..5]}',
             roles    => ['admin'],
           }
@@ -143,12 +143,12 @@ describe 'elasticsearch shield', :with_certificates, :then_purge do
     describe 'single instance manifest' do
       let :single_manifest do
         base_manifest + <<-EOF
-          elasticsearch::instance { ['es-01'] :  }
+          elasticsearch6::instance { ['es-01'] :  }
 
-          Elasticsearch::Plugin { instances => ['es-01'],  }
+          Elasticsearch6::Plugin { instances => ['es-01'],  }
 
 
-          elasticsearch::role { '#{@role}':
+          elasticsearch6::role { '#{@role}':
             privileges => {
               'cluster' => [
                 'cluster:monitor/health',
@@ -156,7 +156,7 @@ describe 'elasticsearch shield', :with_certificates, :then_purge do
             }
           }
 
-          elasticsearch::user { '#{test_settings['security_user']}':
+          elasticsearch6::user { '#{test_settings['security_user']}':
             password => '#{test_settings['security_password']}',
             roles    => ['#{@role}'],
           }
@@ -213,7 +213,7 @@ describe 'elasticsearch shield', :with_certificates, :then_purge do
       describe 'manifest' do
         let :single_manifest do
           base_manifest + <<-EOF
-            elasticsearch::instance { 'es-01':
+            elasticsearch6::instance { 'es-01':
               ssl                  => true,
               ca_certificate       => '#{@tls[:ca][:cert][:path]}',
               certificate          => '#{@tls[:clients].first[:cert][:path]}',
@@ -221,9 +221,9 @@ describe 'elasticsearch shield', :with_certificates, :then_purge do
               keystore_password    => '#{@keystore_password}',
             }
 
-            Elasticsearch::Plugin { instances => ['es-01'],  }
+            Elasticsearch6::Plugin { instances => ['es-01'],  }
 
-            elasticsearch::user { '#{test_settings['security_user']}':
+            elasticsearch6::user { '#{test_settings['security_user']}':
               password => '#{test_settings['security_password']}',
               roles => ['admin'],
             }
@@ -268,13 +268,13 @@ describe 'elasticsearch shield', :with_certificates, :then_purge do
       describe 'manifest' do
         let :multi_manifest do
           base_manifest + %(
-            elasticsearch::user { '#{test_settings['security_user']}':
+            elasticsearch6::user { '#{test_settings['security_user']}':
               password => '#{test_settings['security_password']}',
               roles => ['admin'],
             }
           ) + @tls[:clients].each_with_index.map do |cert, i|
             format(%(
-              elasticsearch::instance { 'es-%02d':
+              elasticsearch6::instance { 'es-%02d':
                 ssl                  => true,
                 ca_certificate       => '#{@tls[:ca][:cert][:path]}',
                 certificate          => '#{cert[:cert][:path]}',
@@ -288,7 +288,7 @@ describe 'elasticsearch shield', :with_certificates, :then_purge do
               }
             ), i + 1, @tls[:clients].length, i)
           end.join("\n") + format(%(
-            Elasticsearch::Plugin { instances => %s, }
+            Elasticsearch6::Plugin { instances => %s, }
           ), @tls[:clients].each_with_index.map do |_, i|
             format('es-%02d', (i + 1))
           end.to_s)
@@ -343,8 +343,8 @@ describe 'elasticsearch shield', :with_certificates, :then_purge do
         format(%(
           class { 'elasticsearch' : ensure => absent, }
 
-          Elasticsearch::Instance { ensure => absent, }
-          elasticsearch::instance { %s : }
+          Elasticsearch6::Instance { ensure => absent, }
+          elasticsearch6::instance { %s : }
         ), @tls[:clients].each_with_index.map do |_, i|
           format('es-%02d', (i + 1))
         end.to_s)

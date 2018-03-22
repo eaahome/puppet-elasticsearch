@@ -52,19 +52,19 @@
 # @author Richard Pijnenburg <richard.pijnenburg@elasticsearch.com>
 # @author Tyler Langlois <tyler.langlois@elastic.co>
 #
-define elasticsearch::template (
+define elasticsearch6::template (
   $ensure                  = 'present',
-  $api_basic_auth_password = $elasticsearch::api_basic_auth_password,
-  $api_basic_auth_username = $elasticsearch::api_basic_auth_username,
-  $api_ca_file             = $elasticsearch::api_ca_file,
-  $api_ca_path             = $elasticsearch::api_ca_path,
-  $api_host                = $elasticsearch::api_host,
-  $api_port                = $elasticsearch::api_port,
-  $api_protocol            = $elasticsearch::api_protocol,
-  $api_timeout             = $elasticsearch::api_timeout,
+  $api_basic_auth_password = $elasticsearch6::api_basic_auth_password,
+  $api_basic_auth_username = $elasticsearch6::api_basic_auth_username,
+  $api_ca_file             = $elasticsearch6::api_ca_file,
+  $api_ca_path             = $elasticsearch6::api_ca_path,
+  $api_host                = $elasticsearch6::api_host,
+  $api_port                = $elasticsearch6::api_port,
+  $api_protocol            = $elasticsearch6::api_protocol,
+  $api_timeout             = $elasticsearch6::api_timeout,
   $content                 = undef,
   $source                  = undef,
-  $validate_tls            = $elasticsearch::validate_tls,
+  $validate_tls            = $elasticsearch6::validate_tls,
 ) {
   if ! defined(Class['elasticsearch']) {
     fail('You must include the elasticsearch base class before using defined resources')

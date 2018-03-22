@@ -62,10 +62,10 @@ Declare the top-level `elasticsearch` class (managing repositories) and set up a
 class { 'elasticsearch':
   java_install => true,
   manage_repo  => true,
-  repo_version => '5.x',
+  repo_version => '6.x',
 }
 
-elasticsearch::instance { 'es-01': }
+elasticsearch6::instance { 'es-01': }
 ```
 
 **Note**: Elasticsearch 5.x requires a recent version of the JVM.
@@ -128,7 +128,7 @@ class { 'elasticsearch':
 
 #### API Settings
 
-Some resources, such as `elasticsearch::template`, require communicating with the Elasticsearch REST API.
+Some resources, such as `elasticsearch6::template`, require communicating with the Elasticsearch REST API.
 By default, these API settings are set to:
 
 ```puppet
@@ -181,7 +181,7 @@ This module works with the concept of instances. For service to start you need t
 #### Quick setup
 
 ```puppet
-elasticsearch::instance { 'es-01': }
+elasticsearch6::instance { 'es-01': }
 ```
 
 This will set up its own data directory and set the node name to `$hostname-$instance_name`
@@ -191,7 +191,7 @@ This will set up its own data directory and set the node name to `$hostname-$ins
 Instance specific options can be given:
 
 ```puppet
-elasticsearch::instance { 'es-01':
+elasticsearch6::instance { 'es-01':
   config        => { }, # Configuration hash
   init_defaults => { }, # Init defaults hash
   datadir       => [ ], # Data directory
@@ -208,7 +208,7 @@ Note that `module_dir` is where the plugin will install itself to and must match
 #### From an official repository
 
 ```puppet
-elasticsearch::plugin { 'lmenezes/elasticsearch-kopf':
+elasticsearch6::plugin { 'lmenezes/elasticsearch-kopf':
   instances => 'instance_name'
 }
 ```
@@ -216,7 +216,7 @@ elasticsearch::plugin { 'lmenezes/elasticsearch-kopf':
 #### From a custom url
 
 ```puppet
-elasticsearch::plugin { 'jetty':
+elasticsearch6::plugin { 'jetty':
   url        => 'https://oss-es-plugins.s3.amazonaws.com/elasticsearch-jetty/elasticsearch-jetty-1.2.1.zip',
   instances  => 'instance_name'
 }
@@ -226,7 +226,7 @@ elasticsearch::plugin { 'jetty':
 
 You can also use a proxy if required by setting the `proxy_host` and `proxy_port` options:
 ```puppet
-elasticsearch::plugin { 'lmenezes/elasticsearch-kopf',
+elasticsearch6::plugin { 'lmenezes/elasticsearch-kopf',
   instances  => 'instance_name',
   proxy_host => 'proxy.host.com',
   proxy_port => 3128
@@ -246,13 +246,13 @@ Plugin name formats that are supported include:
 When you specify a certain plugin version, you can upgrade that plugin by specifying the new version.
 
 ```puppet
-elasticsearch::plugin { 'elasticsearch/elasticsearch-cloud-aws/2.1.1': }
+elasticsearch6::plugin { 'elasticsearch/elasticsearch-cloud-aws/2.1.1': }
 ```
 
 And to upgrade, you would simply change it to
 
 ```puppet
-elasticsearch::plugin { 'elasticsearch/elasticsearch-cloud-aws/2.4.1': }
+elasticsearch6::plugin { 'elasticsearch/elasticsearch-cloud-aws/2.4.1': }
 ```
 
 Please note that this does not work when you specify 'latest' as a version number.
@@ -268,7 +268,7 @@ Installs [scripts](http://www.elastic.co/guide/en/elasticsearch/reference/curren
 These scripts are shared across all defined instances on the same host.
 
 ```puppet
-elasticsearch::script { 'myscript':
+elasticsearch6::script { 'myscript':
   ensure => 'present',
   source => 'puppet:///path/to/my/script.groovy'
 }
@@ -277,7 +277,7 @@ elasticsearch::script { 'myscript':
 Script directories can also be recursively managed for large collections of scripts:
 
 ```puppet
-elasticsearch::script { 'myscripts_dir':
+elasticsearch6::script { 'myscripts_dir':
   ensure  => 'directory,
   source  => 'puppet:///path/to/myscripts_dir'
   recurse => 'remote',
@@ -286,11 +286,11 @@ elasticsearch::script { 'myscripts_dir':
 
 ### Templates
 
-By default templates use the top-level `elasticsearch::api_*` settings to communicate with Elasticsearch.
+By default templates use the top-level `elasticsearch6::api_*` settings to communicate with Elasticsearch.
 The following is an example of how to override these settings:
 
 ```puppet
-elasticsearch::template { 'templatename':
+elasticsearch6::template { 'templatename':
   api_protocol            => 'https',
   api_host                => $::ipaddress,
   api_port                => 9201,
@@ -309,7 +309,7 @@ elasticsearch::template { 'templatename':
 This will install and/or replace the template in Elasticsearch:
 
 ```puppet
-elasticsearch::template { 'templatename':
+elasticsearch6::template { 'templatename':
   source => 'puppet:///path/to/template.json',
 }
 ```
@@ -319,7 +319,7 @@ elasticsearch::template { 'templatename':
 This will install and/or replace the template in Elasticsearch:
 
 ```puppet
-elasticsearch::template { 'templatename':
+elasticsearch6::template { 'templatename':
   content => {
     'template' => "*",
     'settings' => {
@@ -332,7 +332,7 @@ elasticsearch::template { 'templatename':
 Plain JSON strings are also supported.
 
 ```puppet
-elasticsearch::template { 'templatename':
+elasticsearch6::template { 'templatename':
   content => '{"template":"*","settings":{"number_of_replicas":0}}'
 }
 ```
@@ -340,7 +340,7 @@ elasticsearch::template { 'templatename':
 #### Delete a template
 
 ```puppet
-elasticsearch::template { 'templatename':
+elasticsearch6::template { 'templatename':
   ensure => 'absent'
 }
 ```
@@ -358,7 +358,7 @@ This will install and/or replace an ingestion pipeline in Elasticsearch
 (ingestion settings are compared against the present configuration):
 
 ```puppet
-elasticsearch::pipeline { 'addfoo':
+elasticsearch6::pipeline { 'addfoo':
   content => {
     'description' => 'Add the foo field',
     'processors' => [{
@@ -374,7 +374,7 @@ elasticsearch::pipeline { 'addfoo':
 #### Delete a pipeline
 
 ```puppet
-elasticsearch::pipeline { 'addfoo':
+elasticsearch6::pipeline { 'addfoo':
   ensure => 'absent'
 }
 ```
@@ -393,7 +393,7 @@ Note that some settings (such as `number_of_shards`) can only be set at index
 creation time.
 
 ```puppet
-elasticsearch::index { 'foo':
+elasticsearch6::index { 'foo':
   settings => {
     'index' => {
       'number_of_replicas' => 0
@@ -405,7 +405,7 @@ elasticsearch::index { 'foo':
 #### Delete an index
 
 ```puppet
-elasticsearch::index { 'foo':
+elasticsearch6::index { 'foo':
   ensure => 'absent'
 }
 ```
@@ -417,13 +417,13 @@ Install a variety of [clients/bindings](http://www.elasticsearch.org/guide/en/el
 #### Python
 
 ```puppet
-elasticsearch::python { 'rawes': }
+elasticsearch6::python { 'rawes': }
 ```
 
 #### Ruby
 
 ```puppet
-elasticsearch::ruby { 'elasticsearch': }
+elasticsearch6::ruby { 'elasticsearch': }
 ```
 
 ### Connection Validator
@@ -494,7 +494,7 @@ class { 'elasticsearch':
 
 Setting `proxy_url` to a location will enable download using the provided proxy
 server.
-This parameter is also used by `elasticsearch::plugin`.
+This parameter is also used by `elasticsearch6::plugin`.
 Setting the port in the `proxy_url` is mandatory.
 `proxy_url` defaults to `undef` (proxy disabled).
 
@@ -547,7 +547,7 @@ class { 'elasticsearch':
 `jvm.options` can also be controlled per-instance:
 
 ```puppet
-elasticsearch::instance { 'es-01':
+elasticsearch6::instance { 'es-01':
   jvm_options => [
     '-Xms4g',
     '-Xmx4g'
@@ -606,8 +606,8 @@ class { 'elasticsearch':
   security_plugin => 'x-pack',
 }
 
-elasticsearch::instance { 'es-01': }
-elasticsearch::plugin { 'x-pack': instances => 'es-01' }
+elasticsearch6::instance { 'es-01': }
+elasticsearch6::plugin { 'x-pack': instances => 'es-01' }
 ```
 
 The following manifest will do the same, but with Shield:
@@ -620,22 +620,22 @@ class { 'elasticsearch':
   security_plugin => 'shield',
 }
 
-elasticsearch::instance { 'es-01': }
+elasticsearch6::instance { 'es-01': }
 
-Elasticsearch::Plugin { instances => ['es-01'], }
-elasticsearch::plugin { 'license': }
-elasticsearch::plugin { 'shield': }
+Elasticsearch6::Plugin { instances => ['es-01'], }
+elasticsearch6::plugin { 'license': }
+elasticsearch6::plugin { 'shield': }
 ```
 
 The following examples will assume the preceding resources are part of your puppet manifest.
 
 #### Roles
 
-Roles in the file realm (the `esusers` realm in Shield) can be managed using the `elasticsearch::role` type.
+Roles in the file realm (the `esusers` realm in Shield) can be managed using the `elasticsearch6::role` type.
 For example, to create a role called `myrole`, you could use the following resource in X-Pack:
 
 ```puppet
-elasticsearch::role { 'myrole':
+elasticsearch6::role { 'myrole':
   privileges => {
     'cluster' => [ 'monitor' ],
     'indices' => [{
@@ -649,7 +649,7 @@ elasticsearch::role { 'myrole':
 And in Shield:
 
 ```puppet
-elasticsearch::role { 'myrole':
+elasticsearch6::role { 'myrole':
   privileges => {
     'cluster' => 'monitor',
     'indices' => {
@@ -673,11 +673,11 @@ resources { 'elasticsearch_role':
 
 ##### Mappings
 
-Associating mappings with a role for file-based management is done by passing an array of strings to the `mappings` parameter of the `elasticsearch::role` type.
+Associating mappings with a role for file-based management is done by passing an array of strings to the `mappings` parameter of the `elasticsearch6::role` type.
 For example, to define a role with mappings:
 
 ```puppet
-elasticsearch::role { 'logstash':
+elasticsearch6::role { 'logstash':
   mappings   => [
     'cn=group,ou=devteam',
   ],
@@ -707,11 +707,11 @@ resources { 'elasticsearch_role_mapping':
 
 #### Users
 
-Users can be managed using the `elasticsearch::user` type.
+Users can be managed using the `elasticsearch6::user` type.
 For example, to create a user `mysuser` with membership in `myrole`:
 
 ```puppet
-elasticsearch::user { 'myuser':
+elasticsearch6::user { 'myuser':
   password => 'mypassword',
   roles    => ['myrole'],
 }
@@ -720,20 +720,20 @@ elasticsearch::user { 'myuser':
 The `password` parameter will also accept password hashes generated from the `esusers`/`users` utility and ensure the password is kept in-sync with the Shield `users` file for all Elasticsearch instances.
 
 ```puppet
-elasticsearch::user { 'myuser':
+elasticsearch6::user { 'myuser':
   password => '$2a$10$IZMnq6DF4DtQ9c4sVovgDubCbdeH62XncmcyD1sZ4WClzFuAdqspy',
   roles    => ['myrole'],
 }
 ```
 
 **Note**: When using the `esusers`/`users` provider (the default for plaintext passwords), Puppet has no way to determine whether the given password is in-sync with the password hashed by Shield/X-Pack.
-In order to work around this, the `elasticsearch::user` resource has been designed to accept refresh events in order to update password values.
+In order to work around this, the `elasticsearch6::user` resource has been designed to accept refresh events in order to update password values.
 This is not ideal, but allows you to instruct the resource to change the password when needed.
 For example, to update the aforementioned user's password, you could include the following your manifest:
 
 ```puppet
 notify { 'update password': } ~>
-elasticsearch::user { 'myuser':
+elasticsearch6::user { 'myuser':
   password => 'mynewpassword',
   roles    => ['myrole'],
 }
@@ -741,10 +741,10 @@ elasticsearch::user { 'myuser':
 
 #### Certificates
 
-SSL/TLS can be enabled by providing an `elasticsearch::instance` type with paths to the certificate and private key files, and a password for the keystore.
+SSL/TLS can be enabled by providing an `elasticsearch6::instance` type with paths to the certificate and private key files, and a password for the keystore.
 
 ```puppet
-elasticsearch::instance { 'es-01':
+elasticsearch6::instance { 'es-01':
   ssl                  => true,
   ca_certificate       => '/path/to/ca.pem',
   certificate          => '/path/to/cert.pem',
@@ -771,7 +771,7 @@ class { 'elasticsearch':
 Or set on a per-instance basis:
 
 ```puppet
-elasticsearch::instance { 'es-01':
+elasticsearch6::instance { 'es-01':
   system_key => '/local/path/to/key',
 }
 ```
@@ -832,7 +832,7 @@ and
 ```puppet
 class { 'elasticsearch': }
 
-elasticsearch::instance { 'es-01':
+elasticsearch6::instance { 'es-01':
   datadir => '/var/lib/es-data-es01'
 }
 ```
@@ -846,7 +846,7 @@ Creates the following for this instance:
 ```puppet
 class { 'elasticsearch': }
 
-elasticsearch::instance { 'es-01':
+elasticsearch6::instance { 'es-01':
   datadir => ['/var/lib/es-data1-es01', '/var/lib/es-data2-es01']
 }
 ```
@@ -868,8 +868,8 @@ class { 'elasticsearch':
   }
 }
 
-elasticsearch::instance { 'es-01': }
-elasticsearch::instance { 'es-02': }
+elasticsearch6::instance { 'es-01': }
+elasticsearch6::instance { 'es-02': }
 ```
 
 Will result in the following directories created by Elasticsearch at runtime:
@@ -892,10 +892,10 @@ class { 'elasticsearch':
   config => { 'cluster.name' => 'clustername' }
 }
 
-elasticsearch::instance { 'es-01':
+elasticsearch6::instance { 'es-01':
   config => { 'node.name' => 'nodename' }
 }
-elasticsearch::instance { 'es-02':
+elasticsearch6::instance { 'es-02':
   config => { 'node.name' => 'nodename2' }
 }
 ```
@@ -911,11 +911,11 @@ class { 'elasticsearch':
   config => { 'cluster.name' => 'clustername' }
 }
 
-elasticsearch::instance { 'es-01':
+elasticsearch6::instance { 'es-01':
   config => { 'node.name' => 'nodename', 'cluster.name' => 'otherclustername' }
 }
 
-elasticsearch::instance { 'es-02':
+elasticsearch6::instance { 'es-02':
   config => { 'node.name' => 'nodename2' }
 }
 ```
@@ -964,7 +964,7 @@ class { 'elasticsearch':
 
 Recent versions of Elasticsearch include the [elasticsearch-keystore](https://www.elastic.co/guide/en/elasticsearch/reference/current/secure-settings.html) utility to create and manage the `elasticsearch.keystore` file which can store sensitive values for certain settings.
 The settings and values for this file can be controlled by this module.
-Settings follow the behavior of the `config` parameter for the top-level Elasticsearch class and `elasticsearch::instance` defined types.
+Settings follow the behavior of the `config` parameter for the top-level Elasticsearch class and `elasticsearch6::instance` defined types.
 That is, you may define keystore settings globally, and all values will be merged with instance-specific settings for final inclusion in the `elasticsearch.keystore` file.
 Note that each hash key is passed to the `elasticsearch-keystore` utility in a straightforward manner, so you should specify the hash passed to `secrets` in flattened form (that is, without full nested hash representation).
 
@@ -982,7 +982,7 @@ class { 'elasticsearch':
 Or, to instead control these settings for a single instance:
 
 ```puppet
-elasticsearch::instance { 'es-01':
+elasticsearch6::instance { 'es-01':
   secrets => {
     'cloud.aws.access_key' => 'AKIA....',
     'cloud.aws.secret_key' => 'AKIA....',

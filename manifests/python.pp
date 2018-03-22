@@ -2,7 +2,7 @@
 # the ones we know about http://www.elasticsearch.org/guide/clients/
 #
 # @example installing the pyes python Elasticsearch library
-#   elasticsearch::python { 'pyes':; }
+#   elasticsearch6::python { 'pyes':; }
 #
 # @param ensure [String]
 #   Controls if the managed resources shall be `present` or `absent`.
@@ -16,7 +16,7 @@
 # @author Richard Pijnenburg <richard.pijnenburg@elasticsearch.com>
 # @author Tyler Langlois <tyler.langlois@elastic.co>
 #
-define elasticsearch::python (
+define elasticsearch6::python (
   $ensure = 'present'
 ) {
 

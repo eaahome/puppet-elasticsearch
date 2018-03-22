@@ -1,7 +1,7 @@
 # Manages shield/x-pack users.
 #
 # @example creates and manage a user with membership in the 'logstash' and 'kibana4' roles.
-#   elasticsearch::user { 'bob':
+#   elasticsearch6::user { 'bob':
 #     password => 'foobar',
 #     roles    => ['logstash', 'kibana4'],
 #   }
@@ -21,15 +21,15 @@
 #
 # @author Tyler Langlois <tyler.langlois@elastic.co>
 #
-define elasticsearch::user (
+define elasticsearch6::user (
   $password,
   $ensure = 'present',
   $roles  = [],
 ) {
   validate_string($ensure, $password)
   validate_array($roles)
-  if $elasticsearch::security_plugin == undef or ! ($elasticsearch::security_plugin in ['shield', 'x-pack']) {
-    fail("\"${elasticsearch::security_plugin}\" is not a valid security_plugin parameter value")
+  if $elasticsearch6::security_plugin == undef or ! ($elasticsearch6::security_plugin in ['shield', 'x-pack']) {
+    fail("\"${elasticsearch6::security_plugin}\" is not a valid security_plugin parameter value")
   }
 
 
@@ -39,7 +39,7 @@ define elasticsearch::user (
       hashed_password => $password,
     }
   } else {
-    $_provider = $elasticsearch::security_plugin ? {
+    $_provider = $elasticsearch6::security_plugin ? {
       'shield' => 'esusers',
       'x-pack' => 'users',
     }

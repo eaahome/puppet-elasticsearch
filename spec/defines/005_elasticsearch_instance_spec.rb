@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 # rubocop:disable Metrics/LineLength
-describe 'elasticsearch::instance', :type => 'define' do
+describe 'elasticsearch6::instance', :type => 'define' do
   let(:title) { 'es-instance' }
   let(:pre_condition) { 'class { "elasticsearch": }' }
 
@@ -125,13 +125,13 @@ describe 'elasticsearch::instance', :type => 'define' do
     context 'do not happen when restart_on_change is false (default)' do
       it { should_not contain_datacat(
         '/etc/elasticsearch/es-instance/elasticsearch.yml'
-      ).that_notifies('Elasticsearch::Service[es-instance]') }
+      ).that_notifies('Elasticsearch6::Service[es-instance]') }
       it { should_not contain_file(
         '/etc/elasticsearch/es-instance/jvm.options'
-      ).that_notifies('Elasticsearch::Service[es-instance]') }
+      ).that_notifies('Elasticsearch6::Service[es-instance]') }
       it { should_not contain_package(
         'elasticsearch'
-      ).that_notifies('Elasticsearch::Service[es-instance]') }
+      ).that_notifies('Elasticsearch6::Service[es-instance]') }
     end
 
     context 'happen when restart_on_change is true' do
@@ -141,13 +141,13 @@ describe 'elasticsearch::instance', :type => 'define' do
 
       it { should contain_datacat(
         '/etc/elasticsearch/es-instance/elasticsearch.yml'
-      ).that_notifies('Elasticsearch::Service[es-instance]') }
+      ).that_notifies('Elasticsearch6::Service[es-instance]') }
       it { should contain_file(
         '/etc/elasticsearch/es-instance/jvm.options'
-      ).that_notifies('Elasticsearch::Service[es-instance]') }
+      ).that_notifies('Elasticsearch6::Service[es-instance]') }
       it { should contain_package(
         'elasticsearch'
-      ).that_notifies('Elasticsearch::Service[es-instance]') }
+      ).that_notifies('Elasticsearch6::Service[es-instance]') }
     end
 
     context 'on package change' do
@@ -157,13 +157,13 @@ describe 'elasticsearch::instance', :type => 'define' do
 
       it { should_not contain_datacat(
         '/etc/elasticsearch/es-instance/elasticsearch.yml'
-      ).that_notifies('Elasticsearch::Service[es-instance]') }
+      ).that_notifies('Elasticsearch6::Service[es-instance]') }
       it { should_not contain_file(
         '/etc/elasticsearch/es-instance/jvm.options'
-      ).that_notifies('Elasticsearch::Service[es-instance]') }
+      ).that_notifies('Elasticsearch6::Service[es-instance]') }
       it { should contain_package(
         'elasticsearch'
-      ).that_notifies('Elasticsearch::Service[es-instance]') }
+      ).that_notifies('Elasticsearch6::Service[es-instance]') }
     end
 
     context 'on config change' do
@@ -173,13 +173,13 @@ describe 'elasticsearch::instance', :type => 'define' do
 
       it { should contain_datacat(
         '/etc/elasticsearch/es-instance/elasticsearch.yml'
-      ).that_notifies('Elasticsearch::Service[es-instance]') }
+      ).that_notifies('Elasticsearch6::Service[es-instance]') }
       it { should contain_file(
         '/etc/elasticsearch/es-instance/jvm.options'
-      ).that_notifies('Elasticsearch::Service[es-instance]') }
+      ).that_notifies('Elasticsearch6::Service[es-instance]') }
       it { should_not contain_package(
         'elasticsearch'
-      ).that_notifies('Elasticsearch::Service[es-instance]') }
+      ).that_notifies('Elasticsearch6::Service[es-instance]') }
     end
   end
 
@@ -745,7 +745,7 @@ describe 'elasticsearch::instance', :type => 'define' do
                 :recurse => 'remote',
                 :owner   => 'root',
                 :group   => '0',
-                :before  => 'Elasticsearch::Service[es-instance]'
+                :before  => 'Elasticsearch6::Service[es-instance]'
               )
             )
           end
@@ -772,8 +772,8 @@ describe 'elasticsearch::instance', :type => 'define' do
                 :recurse => 'remote',
                 :owner   => 'root',
                 :group   => '0',
-                :before  => 'Elasticsearch::Service[es-instance]',
-                :notify  => 'Elasticsearch::Service[es-instance]'
+                :before  => 'Elasticsearch6::Service[es-instance]',
+                :notify  => 'Elasticsearch6::Service[es-instance]'
               )
             )
           end
@@ -900,7 +900,7 @@ describe 'elasticsearch::instance', :type => 'define' do
           :secrets => {}
         } end
 
-        it { should contain_elasticsearch_keystore('es-instance').that_notifies('Elasticsearch::Service[es-instance]') }
+        it { should contain_elasticsearch_keystore('es-instance').that_notifies('Elasticsearch6::Service[es-instance]') }
       end
     end
 

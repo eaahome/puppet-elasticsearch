@@ -14,7 +14,7 @@
 # @author Richard Pijnenburg <richard.pijnenburg@elasticsearch.com>
 # @author Tyler Langlois <tyler.langlois@elastic.co>
 #
-define elasticsearch::script (
+define elasticsearch6::script (
   $source,
   $ensure  = 'present',
   $recurse = undef,
@@ -26,11 +26,11 @@ define elasticsearch::script (
   $filename_array = split($source, '/')
   $basefilename = $filename_array[-1]
 
-  file { "${elasticsearch::params::homedir}/scripts/${basefilename}":
+  file { "${elasticsearch6::params::homedir}/scripts/${basefilename}":
     ensure  => $ensure,
     source  => $source,
-    owner   => $elasticsearch::elasticsearch_user,
-    group   => $elasticsearch::elasticsearch_group,
+    owner   => $elasticsearch6::elasticsearch_user,
+    group   => $elasticsearch6::elasticsearch_group,
     recurse => $recurse,
     mode    => '0644',
   }

@@ -1,7 +1,7 @@
 require 'spec_helper_acceptance'
 
 # rubocop:disable Metrics/BlockLength
-describe 'elasticsearch::elasticsearch_user', :then_purge do
+describe 'elasticsearch6::elasticsearch_user', :then_purge do
   describe 'changing service user', :with_cleanup do
     describe 'manifest' do
       pp = <<-EOS
@@ -24,7 +24,7 @@ describe 'elasticsearch::elasticsearch_user', :then_purge do
           elasticsearch_group => 'esgroup'
         }
 
-        elasticsearch::instance { 'es-01':
+        elasticsearch6::instance { 'es-01':
           config => {
             'node.name' => 'elasticsearch001',
             'http.port' => '#{test_settings['port_a']}'

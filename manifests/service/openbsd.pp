@@ -36,12 +36,12 @@
 # @author Richard Pijnenburg <richard.pijnenburg@elasticsearch.com>
 # @author Tyler Langlois <tyler.langlois@elastic.co>
 #
-define elasticsearch::service::openbsd(
-  $ensure             = $elasticsearch::ensure,
-  $init_template      = $elasticsearch::init_template,
-  $pid_dir            = $elasticsearch::params::pid_dir,
+define elasticsearch6::service::openbsd(
+  $ensure             = $elasticsearch6::ensure,
+  $init_template      = $elasticsearch6::init_template,
+  $pid_dir            = $elasticsearch6::params::pid_dir,
   $service_flags      = undef,
-  $status             = $elasticsearch::status,
+  $status             = $elasticsearch6::status,
 ) {
 
   #### Service management
@@ -89,7 +89,7 @@ define elasticsearch::service::openbsd(
 
   }
 
-  $notify_service = $elasticsearch::restart_config_change ? {
+  $notify_service = $elasticsearch6::restart_config_change ? {
     true  => Service["elasticsearch-instance-${name}"],
     false => undef,
   }
@@ -105,7 +105,7 @@ define elasticsearch::service::openbsd(
         instance     => $name,
         pid_dir      => $pid_dir,
         notify       => $notify_service,
-        package_name => $elasticsearch::package_name,
+        package_name => $elasticsearch6::package_name,
       }
       -> file { "/etc/rc.d/elasticsearch_${name}":
         ensure => $ensure,
@@ -135,9 +135,9 @@ define elasticsearch::service::openbsd(
       enable     => $service_enable,
       name       => "elasticsearch_${name}",
       flags      => $service_flags,
-      hasstatus  => $elasticsearch::params::service_hasstatus,
-      hasrestart => $elasticsearch::params::service_hasrestart,
-      pattern    => $elasticsearch::params::service_pattern,
+      hasstatus  => $elasticsearch6::params::service_hasstatus,
+      hasrestart => $elasticsearch6::params::service_hasrestart,
+      pattern    => $elasticsearch6::params::service_pattern,
     }
 
   }
